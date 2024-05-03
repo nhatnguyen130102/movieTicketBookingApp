@@ -286,7 +286,7 @@ class _BillingPageState extends State<BillingPage> {
                                               ),
                                               Gap(4),
                                               Text(
-                                                _itemFormat.name,
+                                                _itemFormat.name.toUpperCase(),
                                                 style: TextStyle(
                                                   fontWeight: semibold,
                                                   fontSize: 18,
@@ -329,7 +329,7 @@ class _BillingPageState extends State<BillingPage> {
                                 Container(
                                   width: size.width * 0.8,
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 4),
+                                      horizontal: 16, vertical: 2),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       left: BorderSide(
@@ -351,12 +351,12 @@ class _BillingPageState extends State<BillingPage> {
                                           color: yellow,
                                         ),
                                       ),
-                                      Gap(10),
+                                      Gap(8),
                                       Text(
                                         widget.booked.join(', '),
                                         style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: medium,
+                                          fontSize: 16,
+                                          fontWeight: semibold,
                                         ),
                                       )
                                     ],
@@ -470,7 +470,7 @@ class _BillingPageState extends State<BillingPage> {
                                         //2-active-buttons
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             GestureDetector(
                                               onTap: () {
@@ -483,7 +483,7 @@ class _BillingPageState extends State<BillingPage> {
                                                 });
                                               },
                                               child: Container(
-                                                width: size.width * 0.4 - 16,
+                                                width: size.width * 0.4 - 8,
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 16),
                                                 decoration: BoxDecoration(
@@ -534,7 +534,7 @@ class _BillingPageState extends State<BillingPage> {
                                                 );
                                               },
                                               child: Container(
-                                                width: size.width * 0.4 - 16,
+                                                width: size.width * 0.4 - 8,
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 16),
                                                 decoration: BoxDecoration(

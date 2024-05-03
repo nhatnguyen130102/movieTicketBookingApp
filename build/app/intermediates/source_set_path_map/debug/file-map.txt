@@ -28,22 +28,22 @@ com.example.project_1.app-lifecycle-runtime-2.5.1-26 C:\Users\nhat\.gradle\cache
 com.example.project_1.app-browser-1.4.0-27 C:\Users\nhat\.gradle\caches\transforms-3\e22b4f4bf24b15e7a89a8de5f5000a73\transformed\browser-1.4.0\res
 com.example.project_1.app-jetified-play-services-basement-18.3.0-28 C:\Users\nhat\.gradle\caches\transforms-3\f4c9092ebd95742cbb3b74097eb7651b\transformed\jetified-play-services-basement-18.3.0\res
 com.example.project_1.app-jetified-play-services-auth-21.0.0-29 C:\Users\nhat\.gradle\caches\transforms-3\fb3f4cb90f06e9d3d893f1b86c6d8dd7\transformed\jetified-play-services-auth-21.0.0\res
-com.example.project_1.app-debug-30 D:\Documens\test\project_1\android\app\src\debug\res
-com.example.project_1.app-main-31 D:\Documens\test\project_1\android\app\src\main\res
-com.example.project_1.app-pngs-32 D:\Documens\test\project_1\build\app\generated\res\pngs\debug
-com.example.project_1.app-resValues-33 D:\Documens\test\project_1\build\app\generated\res\resValues\debug
-com.example.project_1.app-rs-34 D:\Documens\test\project_1\build\app\generated\res\rs\debug
-com.example.project_1.app-mergeDebugResources-35 D:\Documens\test\project_1\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
-com.example.project_1.app-mergeDebugResources-36 D:\Documens\test\project_1\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
-com.example.project_1.app-merged_res-37 D:\Documens\test\project_1\build\app\intermediates\merged_res\debug
-com.example.project_1.app-packaged_res-38 D:\Documens\test\project_1\build\cached_video_player\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-39 D:\Documens\test\project_1\build\cloud_firestore\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-40 D:\Documens\test\project_1\build\firebase_auth\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-41 D:\Documens\test\project_1\build\firebase_core\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-42 D:\Documens\test\project_1\build\firebase_database\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-43 D:\Documens\test\project_1\build\firebase_messaging\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-44 D:\Documens\test\project_1\build\flutter_inappwebview\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-45 D:\Documens\test\project_1\build\geolocator_android\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-46 D:\Documens\test\project_1\build\google_sign_in_android\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-47 D:\Documens\test\project_1\build\pay_android\intermediates\packaged_res\debug
-com.example.project_1.app-packaged_res-48 D:\Documens\test\project_1\build\shared_preferences_android\intermediates\packaged_res\debug
+com.example.project_1.app-debug-30 D:\Documens\save flutter\movieTicketBookingApp\project_1\android\app\src\debug\res
+com.example.project_1.app-main-31 D:\Documens\save flutter\movieTicketBookingApp\project_1\android\app\src\main\res
+com.example.project_1.app-pngs-32 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\app\generated\res\pngs\debug
+com.example.project_1.app-resValues-33 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\app\generated\res\resValues\debug
+com.example.project_1.app-rs-34 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\app\generated\res\rs\debug
+com.example.project_1.app-mergeDebugResources-35 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.project_1.app-mergeDebugResources-36 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.project_1.app-merged_res-37 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\app\intermediates\merged_res\debug
+com.example.project_1.app-packaged_res-38 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\cached_video_player\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-39 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\cloud_firestore\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-40 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\firebase_auth\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-41 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\firebase_core\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-42 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\firebase_database\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-43 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\firebase_messaging\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-44 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\flutter_inappwebview\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-45 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\geolocator_android\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-46 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\google_sign_in_android\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-47 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\pay_android\intermediates\packaged_res\debug
+com.example.project_1.app-packaged_res-48 D:\Documens\save flutter\movieTicketBookingApp\project_1\build\shared_preferences_android\intermediates\packaged_res\debug

@@ -9,10 +9,11 @@ import 'package:project_1/screen/login.dart';
 import 'package:project_1/screen/movie_detail.dart';
 import 'package:project_1/screen/search.dart';
 import 'package:project_1/style/style.dart';
-import 'package:project_1/test/viewlocation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../repository/movie_repository.dart';
-import '../test/AD_dashboard.dart';
+import 'admin/AD_dashboard.dart';
+import 'admin/viewlocation.dart';
+
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
