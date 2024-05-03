@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "662020882807",
+    "firebase_url": "https://movietiket-331f5-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "movietiket-331f5",
+    "storage_bucket": "movietiket-331f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662020882807:android:394d40fddab755abe32172",
+        "android_client_info": {
+          "package_name": "com.example.project_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoYGGC_H-2AwX1YcsAKPBwT54TXKBgK4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662020882807:android:77dbd8c353009e8de32172",
+        "android_client_info": {
+          "package_name": "com.example.test_fb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoYGGC_H-2AwX1YcsAKPBwT54TXKBgK4c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
