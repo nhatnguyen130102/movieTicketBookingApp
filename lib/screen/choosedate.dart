@@ -490,7 +490,8 @@ class _Choose_DateState extends State<Choose_Date> {
                                               white.withOpacity(0.1),
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
-                                                  yellow),
+                                                  yellow
+                                              ),
                                         ),
                                       ),
                                     ],

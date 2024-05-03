@@ -5,6 +5,8 @@ import '../../style/style.dart';
 import 'AD_editor.dart';
 import 'package:heroicons/heroicons.dart';
 
+import 'AD_sidebar.dart';
+
 
 
 class DashboardPage extends StatefulWidget {
@@ -44,6 +46,21 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                   child: HeroIcon(HeroIcons.pencil),
+                ),
+              ),
+              Gap(8),
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SidebarPage(),
+                      ),
+                    );
+                  },
+                  child: HeroIcon(HeroIcons.bars2),
                 ),
               ),
             ],

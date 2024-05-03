@@ -84,6 +84,48 @@ class _SeatPageState extends State<ChooseSeat> {
               padding: EdgeInsets.all(10.0),
               child: Column(
                 children: [
+                  Container(
+                    width: size.width,
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ABC'),
+                            Gap(4),
+                            Text('ABC'),
+                          ],
+                        ),
+                        Text('/', style: TextStyle(fontSize: 24),),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ABC'),
+                            Gap(4),
+                            Text('ABC'),
+                          ],
+                        ),
+
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ABC'),
+                            Gap(4),
+                            Text('ABC'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Gap(24),
                   //Screen
                   Container(
                     height: 20,
@@ -122,8 +164,6 @@ class _SeatPageState extends State<ChooseSeat> {
                           height: 30,
                           padding: EdgeInsets.all(4),
                           child: ElevatedButton(
-
-
                             onPressed:  _listStringBooked.contains(seatName) ? null : () {
                               _booked.length < _maximunTicket
                                   ? setState(

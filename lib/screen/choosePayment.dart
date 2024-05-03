@@ -36,9 +36,9 @@ class _PaymentPageState extends State<PaymentPage>{
     ],
     style: ApplePayButtonStyle.black,
     width: double.infinity,
-    height: 50,
+    height: 80,
     type: ApplePayButtonType.buy,
-    margin: const EdgeInsets.only(top: 15),
+    margin: const EdgeInsets.only(top: 16),
     onPaymentResult: (result) => debugPrint('Payment Result $result'),
     loadingIndicator: const Center(child: CircularProgressIndicator()),
   );
@@ -52,9 +52,10 @@ class _PaymentPageState extends State<PaymentPage>{
         status: PaymentItemStatus.final_price,
       ),
     ],
+    height: 80,
     width: double.infinity,
     type: GooglePayButtonType.pay,
-    margin: const EdgeInsets.only(top: 15.0),
+    margin: const EdgeInsets.only(top: 16),
     onPaymentResult: (result) => debugPrint('Payment Result $result'),
     loadingIndicator: const Center(child: CircularProgressIndicator()),
   );
