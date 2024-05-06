@@ -484,7 +484,7 @@ class _Choose_DateState extends State<Choose_Date> {
                                       Container(
                                         width: 100,
                                         child: LinearProgressIndicator(
-                                          value: 0.8,
+                                          value: 1,
                                           minHeight: 3.0,
                                           backgroundColor:
                                               white.withOpacity(0.1),

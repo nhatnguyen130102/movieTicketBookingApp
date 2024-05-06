@@ -1,10 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:project_1/repository/movie_repository.dart';
 
+import '../component_widget/loading.dart';
+import '../model/format_model.dart';
+import '../model/movie_model.dart';
+import '../model/screening_model.dart';
+import '../repository/format.dart';
 import '../repository/screening_repository.dart';
 import '../style/style.dart';
 import 'billingpage.dart';
-import 'package:heroicons/heroicons.dart';
 
 class ChooseSeat extends StatefulWidget {
   late String movieID;
@@ -26,6 +35,8 @@ class ChooseSeat extends StatefulWidget {
 class _SeatPageState extends State<ChooseSeat> {
   // repository
   Screening_Repository _screening_repository = Screening_Repository();
+  MovieRepository _movieRepository = MovieRepository();
+  FormatRepository _formatRepository = FormatRepository();
 
   // variable
   final int numRows = 10;
@@ -35,7 +46,6 @@ class _SeatPageState extends State<ChooseSeat> {
   bool isSelected = false;
   late List<bool> _isSelected = [];
   late List<String> _booked;
-  // late List<String> _seatBooked = [];
   final int _maximunTicket = 8;
   late double _subtotal = 0;
   final double _priceOfTicket = 60000;
@@ -43,18 +53,22 @@ class _SeatPageState extends State<ChooseSeat> {
   final List<int> _listCenterSeatColumn = [2, 3, 4, 5, 6];
   late Future<List<String?>> _listBooked;
   late final List<String?> _listStringBooked = [];
+  late Future<MovieModel?> _movieItem;
+  late Future<ScreeningModel?> _screeningItem;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _movieItem = _movieRepository.getMoviesByMovieID(widget.movieID);
     _booked = [];
     _isSelected = List.generate(90, (_) => false);
+    _screeningItem = _screening_repository.getScreeningByID(widget.screeningID);
     _listBooked = _screening_repository.getBookedSeats(widget.screeningID);
     _listBooked.then((value) {
       // Gán giá trị của _listBooked cho _listStringBooked
       setState(() {
-        _listStringBooked.addAll(value );
+        _listStringBooked.addAll(value);
       });
     });
   }
@@ -79,53 +93,12 @@ class _SeatPageState extends State<ChooseSeat> {
       body: Center(
         child: Stack(
           children: [
-
             Container(
+              width: size.width,
+              height: size.height ,
               padding: EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  Container(
-                    width: size.width,
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('ABC'),
-                            Gap(4),
-                            Text('ABC'),
-                          ],
-                        ),
-                        Text('/', style: TextStyle(fontSize: 24),),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('ABC'),
-                            Gap(4),
-                            Text('ABC'),
-                          ],
-                        ),
-
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('ABC'),
-                            Gap(4),
-                            Text('ABC'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Gap(24),
                   //Screen
                   Container(
                     height: 20,
@@ -144,7 +117,9 @@ class _SeatPageState extends State<ChooseSeat> {
                     ),
                   ),
                   //Seat-Grid
-                  Expanded(
+                  Container(
+                    height: size.height * 0.55,
+                    width: size.width,
                     child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: numColumns,
@@ -164,44 +139,32 @@ class _SeatPageState extends State<ChooseSeat> {
                           height: 30,
                           padding: EdgeInsets.all(4),
                           child: ElevatedButton(
-                            onPressed:  _listStringBooked.contains(seatName) ? null : () {
-                              _booked.length < _maximunTicket
-                                  ? setState(
-                                      () {
-                                        _isSelected[index] =
-                                            !_isSelected[index];
-                                        _isSelected[index]
-                                            ? _booked.add(seatName)
-                                            : _booked.remove(seatName);
-                                        _subtotal =
-                                            _booked.length * _priceOfTicket;
-                                      },
-
-                                    )
-                                  : setState(
-                                      () {
-                                        _isSelected[index]
-                                            ? _booked.remove(seatName)
-                                            : showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                      'Thông báo',
-                                                      style: TextStyle(
-                                                        color: black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    content: Container(
-                                                      width: size.width * 0.6,
-                                                      height: 40,
-                                                      child: Column(
-                                                        children: [
-                                                          Text(
-                                                            'Có thể chọn tối đa ${_maximunTicket}',
+                            onPressed: _listStringBooked.contains(seatName)
+                                ? null
+                                : () {
+                                    _booked.length < _maximunTicket
+                                        ? setState(
+                                            () {
+                                              _isSelected[index] =
+                                                  !_isSelected[index];
+                                              _isSelected[index]
+                                                  ? _booked.add(seatName)
+                                                  : _booked.remove(seatName);
+                                              _subtotal = _booked.length *
+                                                  _priceOfTicket;
+                                            },
+                                          )
+                                        : setState(
+                                            () {
+                                              _isSelected[index]
+                                                  ? _booked.remove(seatName)
+                                                  : showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                            'Thông báo',
                                                             style: TextStyle(
                                                               color: black,
                                                               fontWeight:
@@ -209,66 +172,86 @@ class _SeatPageState extends State<ChooseSeat> {
                                                                       .bold,
                                                             ),
                                                           ),
-                                                          Text(
-                                                            'Max: ${_maximunTicket}',
-                                                            style: TextStyle(
-                                                              color: black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                          content: Container(
+                                                            width: size.width *
+                                                                0.6,
+                                                            height: 40,
+                                                            child: Column(
+                                                              children: [
+                                                                Text(
+                                                                  'Có thể chọn tối đa ${_maximunTicket}',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  'Max: ${_maximunTicket}',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color:
+                                                                        black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    actions: <Widget>[
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          // Đóng AlertDialog
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: Center(
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15),
-                                                              color: Colors
-                                                                  .redAccent,
-                                                            ),
-                                                            height: 50,
-                                                            width: 200,
-                                                            child: Center(
-                                                              child: Text(
-                                                                'Confirm',
-                                                                style:
-                                                                    TextStyle(
-                                                                  color: white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                          actions: <Widget>[
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                // Đóng AlertDialog
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: Center(
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
+                                                                    color: Colors
+                                                                        .redAccent,
+                                                                  ),
+                                                                  height: 50,
+                                                                  width: 200,
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      'Confirm',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color:
+                                                                            white,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                        _isSelected[index]
-                                            ? _isSelected[index] = false
-                                            : _isSelected[index] = false;
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                              _isSelected[index]
+                                                  ? _isSelected[index] = false
+                                                  : _isSelected[index] = false;
 
-                                        _subtotal =
-                                            _booked.length * _priceOfTicket;
-                                      },
-                                    );
-                            },
+                                              _subtotal = _booked.length *
+                                                  _priceOfTicket;
+                                            },
+                                          );
+                                  },
                             style: ButtonStyle(
                               padding:
                                   MaterialStateProperty.all(EdgeInsets.zero),
@@ -283,12 +266,20 @@ class _SeatPageState extends State<ChooseSeat> {
                                       _listCenterSeatColumn.contains(column)
                                   ? MaterialStateProperty.all(_isSelected[index]
                                       ? yellow
-                                      : _listStringBooked.contains(seatName) ? white.withOpacity(0.1) : pink.withOpacity(0.4))
+                                      : _listStringBooked.contains(seatName)
+                                          ? white.withOpacity(0.1)
+                                          : pink.withOpacity(0.4))
                                   : MaterialStateProperty.all(_isSelected[index]
                                       ? yellow
-                                      : _listStringBooked.contains(seatName) ?  white.withOpacity(0.1) :  white.withOpacity(0.1)),
-                              foregroundColor: MaterialStateProperty.all(
-                                  _isSelected[index] ? black : _listStringBooked.contains(seatName) ? white.withOpacity(0.2) : white),
+                                      : _listStringBooked.contains(seatName)
+                                          ? white.withOpacity(0.1)
+                                          : white.withOpacity(0.1)),
+                              foregroundColor:
+                                  MaterialStateProperty.all(_isSelected[index]
+                                      ? black
+                                      : _listStringBooked.contains(seatName)
+                                          ? white.withOpacity(0.2)
+                                          : white),
                             ),
                             child: Text(
                               '${seatName}',
@@ -302,9 +293,170 @@ class _SeatPageState extends State<ChooseSeat> {
                       },
                     ),
                   ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: size.width * 1/4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  color: yellow
+                                ),
+                              ),
+                              Text('Standard'),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 1/4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                    color: pink
+                                ),
+                              ),
+                              Text('VIP'),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 1/4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey
+                                ),
+                              ),
+                              Text('Reserved'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
+            FutureBuilder(
+                future: _screeningItem,
+                builder: (context, screeningItemSnapShot) {
+                  if (screeningItemSnapShot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
+                  } else if (screeningItemSnapShot.hasError) {
+                    return Text(
+                        'Error: ${screeningItemSnapShot.error}'); // Xử lý lỗi nếu có
+                  } else if (screeningItemSnapShot.data == null) {
+                    return Text(
+                        'No data available'); // Xử lý khi không có dữ liệu
+                  } else {
+                    return FutureBuilder(
+                      future: _movieItem,
+                      builder: (context, movieItemSnapShot) {
+                        if (movieItemSnapShot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
+                        } else if (movieItemSnapShot.hasError) {
+                          return Text(
+                              'Error: ${movieItemSnapShot.error}'); // Xử lý lỗi nếu có
+                        } else if (movieItemSnapShot.data == null) {
+                          return Text(
+                              'No data available'); // Xử lý khi không có dữ liệu
+                        } else {
+                          return Positioned(
+                            bottom: 120,
+                            left: 10,
+                            right: 10,
+                            child: Container(
+                              width: size.width,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: white.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(movieItemSnapShot.data!.name),
+                                      Gap(4),
+                                      Text(screeningItemSnapShot.data!.time +
+                                          ' - ' +
+                                          screeningItemSnapShot.data!.date),
+                                    ],
+                                  ),
+                                  Text(
+                                    '/',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Room'),
+                                      Gap(4),
+                                      Text(screeningItemSnapShot.data!.room),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Format'),
+                                      Gap(4),
+                                      FutureBuilder(
+                                        future: _formatRepository.getFormatByID(
+                                            screeningItemSnapShot
+                                                .data!.formatID),
+                                        builder: (context, formatSnapShot) {
+                                          if (formatSnapShot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
+                                          } else if (formatSnapShot.hasError) {
+                                            return Text(
+                                                'Error: ${formatSnapShot.error}'); // Xử lý lỗi nếu có
+                                          } else if (formatSnapShot.data ==
+                                              null) {
+                                            return Text(
+                                                'No data available'); // Xử lý khi không có dữ liệu
+                                          } else {
+                                            FormatModel _itemFormat =
+                                                formatSnapShot.data!;
+                                            return Text(
+                                                formatSnapShot.data!.name);
+                                          }
+                                          ;
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  }
+                }),
             Positioned(
               bottom: 30,
               left: 10,

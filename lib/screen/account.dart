@@ -37,9 +37,7 @@ class _AccountState extends State<Account> {
   void _checkIfUserIsLoggedIn() async {
     // Kiểm tra xem có người dùng nào đã đăng nhập trước đó hay không
     User? user = _auth.currentUser;
-
     if (user != null) {
-
       _accountEmail = FirebaseAuth.instance.currentUser!.email!;
       _accountName = FirebaseAuth.instance.currentUser!.displayName!;
     } else {

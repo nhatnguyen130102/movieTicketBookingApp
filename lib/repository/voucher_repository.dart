@@ -43,7 +43,7 @@ class VoucherRepository {
 
   Future<List<VoucherModel>> getAllVouchers() async {
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('vouchers').get();
+      QuerySnapshot querySnapshot = await _firestore.collection('voucher').get();
       return querySnapshot.docs.map((doc) => VoucherModel.fromFirestore(doc)).toList();
     } catch (e) {
       throw Exception('Failed to get vouchers: $e');
@@ -52,7 +52,7 @@ class VoucherRepository {
 
   Future<VoucherModel?> getVoucherDetail(String voucherID) async {
     try {
-      DocumentSnapshot docSnapshot = await _firestore.collection('vouchers').doc(voucherID).get();
+      DocumentSnapshot docSnapshot = await _firestore.collection('voucher').doc(voucherID).get();
       if (docSnapshot.exists) {
         return VoucherModel.fromFirestore(docSnapshot);
       } else {
@@ -65,7 +65,7 @@ class VoucherRepository {
 
   Future<void> updateVoucher(VoucherModel voucher) async {
     try {
-      await _firestore.collection('vouchers').doc(voucher.voucherID).update(voucher.toMap());
+      await _firestore.collection('voucher').doc(voucher.voucherID).update(voucher.toMap());
     } catch (e) {
       throw Exception('Failed to update voucher: $e');
     }
@@ -73,9 +73,17 @@ class VoucherRepository {
 
   Future<void> deleteVoucher(String voucherID) async {
     try {
-      await _firestore.collection('vouchers').doc(voucherID).delete();
+      await _firestore.collection('voucher').doc(voucherID).delete();
     } catch (e) {
       throw Exception('Failed to delete voucher: $e');
     }
   }
+  // Future<VoucherModel?> getVoucherByID(String voucherID) async {
+  //   try {
+  //
+  //   }
+  //   catch (e){
+  //     return null;
+  //   }
+  // }
 }

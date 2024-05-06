@@ -21,14 +21,14 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  late UserRepository userRepository;
+  late LoginRepository loginRepository;
   bool isLoggedIn = false;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
-    userRepository = UserRepository(); // Khởi tạo biến userRepository ở đây
+    loginRepository = LoginRepository(); // Khởi tạo biến userRepository ở đây
   }
 
   final TextEditingController _usernameController = TextEditingController();

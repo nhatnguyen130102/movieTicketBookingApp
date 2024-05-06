@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/login_model.dart';
 
-class UserRepository {
+class LoginRepository {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('user');
 

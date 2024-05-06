@@ -9,6 +9,7 @@ import 'package:project_1/style/style.dart';
 import 'package:heroicons/heroicons.dart';
 
 import '../component_widget/loading.dart';
+import '../component_widget/trailer_component.dart';
 import '../model/movie_model.dart';
 import 'chooselocation.dart';
 
@@ -221,7 +222,7 @@ class _MovieDetailState extends State<MovieDetail> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                          MyYoutube(),
+                                            TrailerComponent(trailerID: _modunMovie.trailer,),
                                       ),
                                     );
                                   },
