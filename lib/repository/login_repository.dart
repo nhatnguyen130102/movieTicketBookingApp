@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../model/login_model.dart';
+import '../model/user_model.dart';
+
+
 
 class LoginRepository {
   final CollectionReference usersCollection =
@@ -73,18 +75,5 @@ class LoginRepository {
   }
 
   // Phương thức để lấy danh sách tất cả người dùng từ Firestore
-  Future<List<UserModel>> getAllUsers() async {
-    try {
-      QuerySnapshot querySnapshot = await usersCollection.get();
-      List<UserModel> userList = [];
-      querySnapshot.docs.forEach((doc) {
-        userList
-            .add(UserModel.fromMap(doc.data() as DocumentSnapshot<Object?>));
-      });
-      return userList;
-    } catch (e) {
-      print('Failed to get all users: $e');
-      return [];
-    }
-  }
+
 }

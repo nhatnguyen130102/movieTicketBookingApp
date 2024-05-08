@@ -1,18 +1,15 @@
-import 'dart:math';
-
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:intl/intl.dart';
 import 'package:project_1/model/cinema_model.dart';
 import 'package:project_1/repository/booking_repository.dart';
 import 'package:project_1/repository/cinema_repository.dart';
-import 'package:project_1/repository/format.dart';
+import 'package:project_1/repository/format_repository.dart';
 import 'package:project_1/repository/movie_repository.dart';
 import 'package:project_1/repository/screening_repository.dart';
-import 'package:project_1/screen/mainlayout.dart';
+import 'package:project_1/screen/rating.dart';
 
 import '../component_widget/loading.dart';
 import '../model/format_model.dart';
@@ -52,6 +49,7 @@ class _BillingPageState extends State<Ticket_Detail> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late String _userID;
   late bool isLogin;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -59,6 +57,7 @@ class _BillingPageState extends State<Ticket_Detail> {
     _checkIfUserIsLoggedIn();
     _movie = _movieRepository.getMoviesByMovieID(widget.movieID);
   }
+
   void _checkIfUserIsLoggedIn() async {
     // Kiểm tra xem có người dùng nào đã đăng nhập trước đó hay không
     User? user = _auth.currentUser;
@@ -70,6 +69,7 @@ class _BillingPageState extends State<Ticket_Detail> {
       isLogin = false;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -349,8 +349,9 @@ class _BillingPageState extends State<Ticket_Detail> {
                                             return Text(
                                                 'No data available'); // Xử lý khi không có dữ liệu
                                           } else {
-                                            return  Text(
-                                              bookedSnapShot.data!.seat.join(', '),
+                                            return Text(
+                                              bookedSnapShot.data!.seat
+                                                  .join(', '),
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: semibold,
@@ -359,7 +360,6 @@ class _BillingPageState extends State<Ticket_Detail> {
                                           }
                                         },
                                       ),
-
                                     ],
                                   ),
                                 ),
@@ -476,7 +476,15 @@ class _BillingPageState extends State<Ticket_Detail> {
                                           GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        RatingPage(
+                                                            movieID: _itemMovie
+                                                                .movieID),
+                                                  ),
+                                                );
                                               });
                                             },
                                             child: Container(
@@ -491,7 +499,7 @@ class _BillingPageState extends State<Ticket_Detail> {
                                                     BorderRadius.circular(5),
                                               ),
                                               child: Text(
-                                                'CANCEL',
+                                                'RATING',
                                                 style: TextStyle(
                                                   fontWeight: bold,
                                                   fontSize: 14,

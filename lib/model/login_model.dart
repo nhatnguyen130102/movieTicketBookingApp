@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserModel {
+class LoginModel {
   late String userID;
   late String username;
   late String password;
   late String role;
   late bool status;
 
-  UserModel({
+  LoginModel({
     required this.userID,
     required this.username,
     required this.password,
@@ -18,9 +18,9 @@ class UserModel {
   });
 
   // Phương thức từMap để tạo đối tượng User từ dữ liệu trả về từ Firestore
-  factory UserModel.fromMap(DocumentSnapshot doc) {
+  factory LoginModel.fromMap(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
-    return UserModel(
+    return LoginModel(
       userID: doc.id,
       username: data['username'] ?? '',
       password: data['password'] ?? '',
@@ -40,7 +40,7 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromJson(String json) {
-    return UserModel.fromMap(jsonDecode(json));
+  factory LoginModel.fromJson(String json) {
+    return LoginModel.fromMap(jsonDecode(json));
   }
 }

@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:project_1/model/cinema_model.dart';
 import 'package:project_1/repository/booking_repository.dart';
 import 'package:project_1/repository/cinema_repository.dart';
-import 'package:project_1/repository/format.dart';
+import 'package:project_1/repository/format_repository.dart';
 import 'package:project_1/repository/movie_repository.dart';
 import 'package:project_1/repository/screening_repository.dart';
 import 'package:project_1/screen/mainlayout.dart';

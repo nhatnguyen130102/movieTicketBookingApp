@@ -11,6 +11,7 @@ import 'package:project_1/screen/search.dart';
 import 'package:project_1/style/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../repository/movie_repository.dart';
+import '../repository/reivew_repository.dart';
 import 'admin/AD_dashboard.dart';
 import 'admin/viewlocation.dart';
 
@@ -24,33 +25,18 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
 
   final MovieRepository _movieRepository = MovieRepository();
+  final Review_Repository _review_repository = Review_Repository();
+  
+  
   late Future<List<MovieModel>> _moviesFuture;
+  
   @override
   void initState() {
     super.initState();
     // checkLoginStatus();
     _moviesFuture = _movieRepository.getMovies();
-  }
 
-  // void checkLoginStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-  //   if (isLoggedIn) {
-  //     String username = prefs.getString('username') ?? '';
-  //     String userID = prefs.getString('userID') ?? '';
-  //     setState(() {
-  //       this.isLoggedIn = isLoggedIn;
-  //       this.username = username;
-  //       this.userID = userID;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       this.isLoggedIn = false;
-  //       this.username = '';
-  //       this.userID = '';
-  //     });
-  //   }
-  // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +173,7 @@ class _MainLayoutState extends State<MainLayout> {
                 }
                 List<MovieModel> movie_modun =
                     snapshot.data!;
+
                 return Container(
                   child: Stack(
                     children: [
@@ -254,7 +241,7 @@ class _MainLayoutState extends State<MainLayout> {
                                             ),
                                             Gap(8),
                                             Text(
-                                              i.rating.toDouble().toString(),
+                                              i.rating.toString(),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(

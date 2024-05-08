@@ -10,7 +10,7 @@ import '../component_widget/loading.dart';
 import '../model/format_model.dart';
 import '../model/movie_model.dart';
 import '../model/screening_model.dart';
-import '../repository/format.dart';
+import '../repository/format_repository.dart';
 import '../repository/screening_repository.dart';
 import '../style/style.dart';
 import 'billingpage.dart';

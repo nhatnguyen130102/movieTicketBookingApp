@@ -64,4 +64,22 @@ class UserRepository {
       return null;
     }
   }
+  Future<List<UserModel>> getAllUsers() async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('user').get();
+      return querySnapshot.docs.map((e) => UserModel.fromMap(e)).toList();
+    } catch (e) {
+      print('Failed to get all users: $e');
+      return [];
+    }
+  }
+  Future<UserModel> getUserByID(String userID) async {
+    try{
+      QuerySnapshot _getUser = await _firestore.collection('user').where('userID',isEqualTo: userID).get();
+      return _getUser.docs.map((e) => UserModel.fromMap(e)).first;
+    }
+    catch (e){
+      throw e;
+    }
+  }
 }
