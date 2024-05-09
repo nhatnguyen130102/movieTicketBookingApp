@@ -5,20 +5,6 @@ import 'loginemail.dart';
 import 'loginphone.dart';
 import 'phone.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: EntryScreen(),
-    );
-  }
-}
-
 class EntryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

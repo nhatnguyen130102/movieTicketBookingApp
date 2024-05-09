@@ -6,6 +6,8 @@ class CinemaModel {
   late String name; // Tên của rạp chiếu phim
   late String address;
   late List<Room> room; // Danh sách các phòng
+  late double latitude;
+  late double longitude;
 
   CinemaModel({
     required this.cinemaID,
@@ -13,6 +15,8 @@ class CinemaModel {
     required this.name,
     required this.room,
     required this.address,
+    required this.latitude,
+    required this.longitude,
   });
 
   // Hàm chuyển đổi dữ liệu từ Firestore thành một đối tượng Cinema
@@ -23,21 +27,12 @@ class CinemaModel {
       locationID: data['locationID'] ?? '',
       name: data['name'] ?? '',
       address: data['address'],
+      latitude: (data['latitude'] ?? 0).toDouble(),
+      longitude: (data['longitude'] ?? 0).toDouble(),
       room: List<Room>.from(
         (data['room'] ?? []).map((room) => Room.fromMap(room)),
       ),
     );
-  }
-
-  // Hàm chuyển đổi dữ liệu từ đối tượng Cinema thành một Map để lưu vào Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'cinemaID': cinemaID,
-      'locationID': locationID,
-      'name': name,
-      'address': address,
-      'room': room.map((room) => room.toMap()).toList(),
-    };
   }
 }
 

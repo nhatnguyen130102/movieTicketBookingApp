@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:project_1/screen/admin/user/create_user.dart';
+import 'package:project_1/screen/admin/movie/main_movie.dart';
+
 import 'package:project_1/screen/admin/user/main_user.dart';
+import 'package:project_1/screen/admin/voucher/detail_voucher.dart';
 
 import '../../style/style.dart';
 
@@ -60,7 +62,14 @@ class _SidebarPageState extends State<SidebarPage> {
               ),
               Gap(16),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VoucherEditorPage(),
+                    ),
+                  );
+                },
                 child: Text(
                   'Vouchers',
                   style: itemstyle,
@@ -68,7 +77,14 @@ class _SidebarPageState extends State<SidebarPage> {
               ),
               Gap(64),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Main_Movie(),
+                    ),
+                  );
+                },
                 child: Text(
                   'Movies',
                   style: itemstyle,

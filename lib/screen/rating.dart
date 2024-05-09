@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:project_1/repository/movie_repository.dart';
 import 'package:project_1/repository/user_repository.dart';
+import 'package:project_1/screen/movie_detail.dart';
 import 'package:project_1/screen/review.dart';
 
 import '../component_widget/loading.dart';
@@ -28,7 +29,8 @@ class _RatingPageState extends State<RatingPage> {
   UserRepository _userRepository = UserRepository();
 
   //var
-  late Future<List<UserRating>> _listRating;
+  late Future<List<UserRating>> _listRating =
+      _reivew_repository.allRating(widget.movieID);
   late Future<bool> isRating;
   late bool isRatingFormat;
   late Future<MovieModel?> _item;
@@ -39,6 +41,9 @@ class _RatingPageState extends State<RatingPage> {
   late String userID;
   late bool isLogin;
 
+  // late Future<bool> isLiked;
+  late bool isLikedFormat;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -46,7 +51,7 @@ class _RatingPageState extends State<RatingPage> {
     _checkIfUserIsLoggedIn();
     isRating = _reivew_repository.checkReview(widget.movieID, userID);
     _item = _movieRepository.getMoviesByMovieID(widget.movieID);
-    _listRating = _reivew_repository.allRating(widget.movieID);
+    // _listRating = _reivew_repository.allRating(widget.movieID);
   }
 
   void _checkIfUserIsLoggedIn() async {
@@ -73,7 +78,12 @@ class _RatingPageState extends State<RatingPage> {
             HeroIcons.chevronLeft,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (conetxt) => MovieDetail(movieID: widget.movieID),
+              ),
+            );
           },
         ),
       ),
@@ -198,7 +208,7 @@ class _RatingPageState extends State<RatingPage> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '4.9',
+                                  item.rating.toStringAsFixed(1),
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: bold,
@@ -224,73 +234,60 @@ class _RatingPageState extends State<RatingPage> {
                             ),
                           ],
                         ),
+
+                        FutureBuilder(
+                          future: _reivew_repository.checkReview(
+                              userID, widget.movieID),
+                          builder: (context, checkSnapShot) {
+                            if (checkSnapShot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
+                            } else if (checkSnapShot.hasError) {
+                              return Text(
+                                  'Error: ${checkSnapShot.error}'); // Xử lý lỗi nếu có
+                            } else if (checkSnapShot.data == null) {
+                              return Text(
+                                  'No data available'); // Xử lý khi không có dữ liệu
+                            } else {
+                              isRatingFormat = checkSnapShot.data!;
+                              return GestureDetector(
+                                onTap: isLogin
+                                    ? () {
+                                  // Hiển thị hộp thoại khi nhấn vào nút
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReviewPage(
+                                        movieID: widget.movieID,
+                                        userID: userID,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                    : null,
+                                child: Tooltip(
+                                  message: isLogin ? '' : 'Book to Review',
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: yellow,
+                                    ),
+                                    child: Text(
+                                      'Review',
+                                      style: TextStyle(color: black, fontWeight: medium),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+
+
                       ],
                     ),
                     Gap(10),
-                    FutureBuilder(
-                      future: _reivew_repository.checkReview(
-                          userID, widget.movieID),
-                      builder: (context, checkSnapShot) {
-                        if (checkSnapShot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
-                        } else if (checkSnapShot.hasError) {
-                          return Text(
-                              'Error: ${checkSnapShot.error}'); // Xử lý lỗi nếu có
-                        } else if (checkSnapShot.data == null) {
-                          return Text(
-                              'No data available'); // Xử lý khi không có dữ liệu
-                        } else {
-                          isRatingFormat = checkSnapShot.data!;
-                          return GestureDetector(
-                            onTap: isLogin
-                                ? isRatingFormat
-                                    ? null
-                                    : () {
-                                        // Hiển thị hộp thoại khi nhấn vào nút
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ReviewPage(
-                                              movieID: widget.movieID,
-                                              userID: userID,
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                : null,
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                horizontal: 15,
-                              ),
-                              padding: EdgeInsets.all(5),
-                              height: 50,
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  width: 2,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                              child: isLogin
-                                  ? isRatingFormat
-                                      ? Text(
-                                          'Ban da danh gia roi',
-                                          style: TextStyle(color: white),
-                                        )
-                                      : Text(
-                                          'Review',
-                                          style: TextStyle(color: white),
-                                        )
-                                  : Text(
-                                      'Ban can dang nhap va dat ve de co the danh gia',
-                                    ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
 
                     Gap(10),
 
@@ -310,7 +307,7 @@ class _RatingPageState extends State<RatingPage> {
                         } else {
                           return Container(
                             width: size.width,
-                            height: 400,
+                            height: 380,
                             child: ListView.builder(
                               itemCount: ratingSnapShot.data!.length,
                               itemBuilder: (context, index) {
@@ -438,7 +435,6 @@ class _RatingPageState extends State<RatingPage> {
                                               ],
                                             ),
                                             Gap(16),
-
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -447,7 +443,20 @@ class _RatingPageState extends State<RatingPage> {
                                                 Row(
                                                   children: [
                                                     GestureDetector(
-                                                      onTap: () {},
+                                                      onTap: () async {
+                                                        await _reivew_repository
+                                                            .likeRatingTemp(
+                                                                userID,
+                                                                _userRatingModun
+                                                                    .userRatingID,
+                                                                widget.movieID);
+                                                        setState(() {
+                                                          _listRating =
+                                                              _reivew_repository
+                                                                  .allRating(widget
+                                                                      .movieID);
+                                                        });
+                                                      },
                                                       child: Container(
                                                         padding: EdgeInsets
                                                             .symmetric(
@@ -539,7 +548,7 @@ class _RatingPageState extends State<RatingPage> {
                                                   ),
                                                 ),
                                               ],
-                                            )
+                                            ),
                                           ],
                                         ),
                                       );
@@ -563,12 +572,5 @@ class _RatingPageState extends State<RatingPage> {
         },
       ),
     );
-  }
-
-  void _submitReview() {
-    // Lưu đánh giá của người dùng vào cơ sở dữ liệu hoặc thực hiện hành động phù hợp ở đây
-    String reviewText = _textEditingController.text;
-    // Đánh giá từ người dùng có thể lưu hoặc gửi đi ở đây
-    print('Rating: $_rating, Review: $reviewText');
   }
 }

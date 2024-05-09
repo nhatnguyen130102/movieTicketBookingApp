@@ -11,6 +11,7 @@ import 'package:project_1/screen/voucher.dart';
 import 'package:project_1/style/style.dart';
 
 import '../component_widget/loading.dart';
+import '../newDire/entry.dart';
 
 class Account extends StatefulWidget {
 

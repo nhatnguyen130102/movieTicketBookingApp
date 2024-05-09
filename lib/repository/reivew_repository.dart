@@ -105,6 +105,14 @@ class Review_Repository {
       List<MovieModel> _listMovie =
           _listMovieSS.docs.map((e) => MovieModel.fromMap(e)).toList();
       for (MovieModel _itemMovie in _listMovie) {
+        Map<String, dynamic> _updateRatingFirst = {
+          'rating': 0,
+        };
+        await _firestore
+            .collection('movie')
+            .doc(_itemMovie.movieID)
+            .set(_updateRatingFirst, SetOptions(merge: true));
+
         double _avgRating = 0;
         int _count = await countRating(_itemMovie.movieID);
         QuerySnapshot _listRatingSS = await _firestore
@@ -119,15 +127,171 @@ class Review_Repository {
           for (UserRating _item in _listRating) {
             _totalRating += _item.ratingStar;
           }
-           _avgRating = _totalRating / _count;
+          _avgRating = _totalRating / _count;
         }
-        Map<String,dynamic> _updateRating = {
+        Map<String, dynamic> _updateRating = {
           'rating': _avgRating,
         };
-        await _firestore.collection('movie').doc(_itemMovie.movieID).set(_updateRating,SetOptions(merge: true));
+        await _firestore
+            .collection('movie')
+            .doc(_itemMovie.movieID)
+            .set(_updateRating, SetOptions(merge: true));
       }
     } catch (e) {
       throw e;
+    }
+  }
+
+  // Future<void> likeRating(
+  //     String userID, String userRatingID, String movieID) async {
+  //   try {
+  //     QuerySnapshot querySnapshot = await _firestore
+  //         .collection('movie')
+  //         .doc(movieID)
+  //         .collection('userRating')
+  //         .doc(userRatingID)
+  //         .collection('userLike')
+  //         .where('userID', isEqualTo: userID)
+  //         .get();
+  //     UserLike _item = querySnapshot.docs.map((e) => UserLike.fromMap(e)).first;
+  //     if (_item != null) {
+  //       await _firestore
+  //           .collection('movie')
+  //           .doc(movieID)
+  //           .collection('userRating')
+  //           .doc(userRatingID)
+  //           .collection('userLike')
+  //           .doc(_item.userLikeID)
+  //           .delete();
+  //     } else {
+  //       String todayFormatID =
+  //           DateFormat('ddMMyyyyHHmmss').format(DateTime.now());
+  //       String _userLikeID = userID + todayFormatID;
+  //       // Map<String, dynamic> _like = {
+  //       //   'userLikeID': _userLikeID,
+  //       //   'userID': userID,
+  //       // };
+  //       await _firestore
+  //           .collection('movie')
+  //           .doc(movieID)
+  //           .collection('userRating')
+  //           .doc(userRatingID)
+  //           .collection('userLike')
+  //           .doc(_userLikeID)
+  //           .set({
+  //         'userLikeID': _userLikeID,
+  //         'userID': userID,
+  //       });
+  //       QuerySnapshot _item = await _firestore
+  //           .collection('movie')
+  //           .doc(movieID)
+  //           .collection('userRating')
+  //           .where('userRatingID', isEqualTo: userRatingID)
+  //           .get();
+  //       UserRating _userRating =
+  //           _item.docs.map((e) => UserRating.fromMap(e)).first;
+  //       Map<String, dynamic> _updateUserRating = {
+  //         'like': _userRating.like + 1,
+  //       };
+  //       await _firestore
+  //           .collection('movie')
+  //           .doc(movieID)
+  //           .collection('userRating')
+  //           .doc(userRatingID)
+  //           .set(_updateUserRating, SetOptions(merge: true));
+  //     }
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
+
+  Future<bool> checkLike(
+      String userID, String movieID, String userRatingID) async {
+    try {
+      QuerySnapshot _checkReview = await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .doc(userRatingID)
+          .collection('userLike')
+          .where('userID', isEqualTo: userID)
+          .get();
+      UserModel getUser =
+          _checkReview.docs.map((e) => UserModel.fromMap(e)).first;
+      if (getUser != null) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> likeRatingTemp(
+      String userID, String userRatingID, String movieID) async {
+    DocumentSnapshot  _checkLikeSS = await _firestore
+        .collection('movie')
+        .doc(movieID)
+        .collection('userRating')
+        .doc(userRatingID)
+        .collection('userLike')
+        .doc(userID)
+        .get();
+
+    if (_checkLikeSS.exists) {
+      await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .doc(userRatingID)
+          .collection('userLike')
+          .doc(userID)
+          .delete();
+      QuerySnapshot _item = await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .where('userRatingID', isEqualTo: userRatingID)
+          .get();
+      UserRating _userRating = _item.docs.map((e) => UserRating.fromMap(e)).first;
+      Map<String, dynamic> update = {
+        'like': _userRating.like - 1,
+      };
+      await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .doc(userRatingID)
+          .set(update, SetOptions(merge: true));
+    }
+    else{
+      await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .doc(userRatingID)
+          .collection('userLike')
+          .doc(userID)
+          .set({
+        'userID': userID,
+      });
+      QuerySnapshot _item = await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .where('userRatingID', isEqualTo: userRatingID)
+          .get();
+      UserRating _userRating = _item.docs.map((e) => UserRating.fromMap(e)).first;
+      Map<String, dynamic> update = {
+        'like': _userRating.like + 1,
+      };
+      await _firestore
+          .collection('movie')
+          .doc(movieID)
+          .collection('userRating')
+          .doc(userRatingID)
+          .set(update, SetOptions(merge: true));
     }
   }
 }

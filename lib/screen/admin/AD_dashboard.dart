@@ -7,8 +7,9 @@ import 'package:project_1/style/style.dart';
 import '../../component_widget/loading.dart';
 import '../../model/movie_model.dart';
 import '../../repository/movie_repository.dart';
-import 'AD_editor.dart';
+
 import 'AD_sidebar.dart';
+import 'voucher/detail_voucher.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -46,21 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
         actions: [
           Row(
             children: [
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditorPage(),
-                      ),
-                    );
-                  },
-                  child: HeroIcon(HeroIcons.pencil),
-                ),
-              ),
-              Gap(8),
+
               Container(
                 margin: EdgeInsets.only(right: 20),
                 child: GestureDetector(
@@ -89,10 +76,10 @@ class _DashboardPageState extends State<DashboardPage> {
               //Top Movies List
               Container(
                 width: size.width,
-                child: Text('Movie List'),
+                child: Text('Movie List', style: TextStyle(fontWeight: medium, fontSize: 24),),
                 //tương tự Actors List
               ),
-              Gap(10),
+              Gap(16),
               FutureBuilder(
                 future: _moviesFuture,
                 builder: (context, movieSnapShot) {
@@ -132,7 +119,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   }
                 },
               ),
-              Gap(32),
+              Gap(64),
 
               //LineChart
               Container(

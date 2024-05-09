@@ -84,7 +84,7 @@ class UserRating {
     return UserRating(
       date: data['date'] ?? '',
       review: data['review'] ?? '',
-      ratingStar: data['ratingStar'] ?? '',
+      ratingStar: (data['ratingStar'] ?? 0).toDouble(),
       like:  data['like'] ?? 0,
       userRatingID: data['userRatingID'] ?? '',
       userID: data['userID'] ?? '',
@@ -124,18 +124,16 @@ class Reply {
 }
 
 class UserLike {
-  late String UserRating;
   late String userID;
 
   UserLike({
-    required this.UserRating,
+
     required this.userID,
   });
 
   factory UserLike.fromMap(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
     return UserLike(
-      UserRating: data['UserRating'] ?? '',
       userID: data['userID'] ?? '',
     );
   }

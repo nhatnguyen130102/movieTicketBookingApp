@@ -1,41 +1,39 @@
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:heroicons/heroicons.dart';
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:project_1/model/movie_model.dart';
 import 'package:project_1/screen/account.dart';
-import 'package:project_1/screen/login.dart';
 import 'package:project_1/screen/movie_detail.dart';
 import 'package:project_1/screen/search.dart';
 import 'package:project_1/style/style.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import '../component_widget/loading.dart';
 import '../repository/movie_repository.dart';
 import '../repository/reivew_repository.dart';
 import 'admin/AD_dashboard.dart';
 import 'admin/viewlocation.dart';
 
-
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
+
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
 class _MainLayoutState extends State<MainLayout> {
-
   final MovieRepository _movieRepository = MovieRepository();
   final Review_Repository _review_repository = Review_Repository();
-  
-  
+
   late Future<List<MovieModel>> _moviesFuture;
-  
+
   @override
   void initState() {
     super.initState();
     // checkLoginStatus();
     _moviesFuture = _movieRepository.getMovies();
-
+    _review_repository.avgRating();
   }
 
   @override
@@ -73,20 +71,7 @@ class _MainLayoutState extends State<MainLayout> {
                   child: HeroIcon(HeroIcons.magnifyingGlass),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewLocationPage(),
-                      ),
-                    );
-                  },
-                  child: HeroIcon(HeroIcons.mapPin),
-                ),
-              ),
+
               Container(
                 margin: EdgeInsets.only(right: 20),
                 child: GestureDetector(
@@ -105,12 +90,10 @@ class _MainLayoutState extends State<MainLayout> {
           ),
         ],
       ),
-
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-
             //Category-list
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -171,8 +154,7 @@ class _MainLayoutState extends State<MainLayout> {
                     ),
                   );
                 }
-                List<MovieModel> movie_modun =
-                    snapshot.data!;
+                List<MovieModel> movie_modun = snapshot.data!;
 
                 return Container(
                   child: Stack(
@@ -195,8 +177,9 @@ class _MainLayoutState extends State<MainLayout> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          MovieDetail( movieID: i.movieID,),
+                                      builder: (context) => MovieDetail(
+                                        movieID: i.movieID,
+                                      ),
                                     ),
                                   );
                                 },
@@ -221,7 +204,10 @@ class _MainLayoutState extends State<MainLayout> {
                                         gradient: LinearGradient(
                                             begin: Alignment.topCenter,
                                             end: Alignment.bottomCenter,
-                                            stops: [0.1, 0.5],
+                                            stops: [
+                                          0.1,
+                                          0.5
+                                        ],
                                             colors: [
                                           black.withOpacity(0.9),
                                           Colors.transparent,
@@ -241,7 +227,7 @@ class _MainLayoutState extends State<MainLayout> {
                                             ),
                                             Gap(8),
                                             Text(
-                                              i.rating.toString(),
+                                              i.rating.toStringAsFixed(1),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
@@ -275,7 +261,6 @@ class _MainLayoutState extends State<MainLayout> {
                           );
                         }).toList(),
                       ),
-
                     ],
                   ),
                 );
@@ -286,4 +271,60 @@ class _MainLayoutState extends State<MainLayout> {
       ),
     );
   }
+
+// Future<int> countRating(String movieID) async {
+//   try {
+//     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+//
+//     QuerySnapshot countRating = await _firestore
+//         .collection('movie')
+//         .doc(movieID)
+//         .collection('userRating')
+//         .get();
+//     List<UserRating?> _listUserRating =
+//         countRating.docs.map((e) => UserRating.fromMap(e)).toList();
+//     if (_listUserRating != null) {
+//       int _count = 0;
+//       while (_count < _listUserRating.length) {
+//         _count++;
+//       }
+//       return _count;
+//     } else {
+//       return 0;
+//     }
+//   } catch (e) {
+//     throw e;
+//   }
+// }
+//
+// Future<double> _avgRatingTemp(String movieID) async {
+//   try {
+//     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+//     QuerySnapshot _listMovieSS = await _firestore
+//         .collection('movie')
+//         .where('movieID', isEqualTo: movieID)
+//         .get();
+//     MovieModel _itemMovie =
+//         _listMovieSS.docs.map((e) => MovieModel.fromMap(e)).first;
+//     double _avgRating = 0;
+//     int _count = await countRating(_itemMovie.movieID);
+//     QuerySnapshot _listRatingSS = await _firestore
+//         .collection('movie')
+//         .doc(_itemMovie.movieID)
+//         .collection('userRating')
+//         .get();
+//     List<UserRating> _listRating =
+//         _listRatingSS.docs.map((e) => UserRating.fromMap(e)).toList();
+//     if (_listRating != null) {
+//       double _totalRating = 0;
+//       for (UserRating _item in _listRating) {
+//         _totalRating += _item.ratingStar;
+//       }
+//       _avgRating = _totalRating / _count;
+//     }
+//     return _avgRating;
+//   } catch (e) {
+//     throw e;
+//   }
+// }
 }

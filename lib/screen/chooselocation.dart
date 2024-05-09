@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:project_1/model/cinema_model.dart';
 import 'package:project_1/repository/cinema_repository.dart';
 import 'package:project_1/repository/location_repository.dart';
+import 'package:project_1/screen/admin/viewlocation.dart';
 import 'package:project_1/screen/choosedate.dart';
 import 'package:heroicons/heroicons.dart';
 
@@ -248,13 +249,20 @@ class _Choose_LocationState extends State<Choose_Location> {
                                           ),
                                           Gap(4),
                                           Expanded(
-                                            child: Text(
-                                              snapshot.data![index].address,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: white.withOpacity(0.6),
-                                                fontSize: 16,
+                                            child: GestureDetector(
+                                              onTap: (){
+                                                setState(() {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewLocationPage(latitude: snapshot.data![index].latitude, longitude: snapshot.data![index].longitude)));
+                                                });
+                                              },
+                                              child: Text(
+                                                snapshot.data![index].address,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: white.withOpacity(0.6),
+                                                  fontSize: 16,
+                                                ),
                                               ),
                                             ),
                                           )
