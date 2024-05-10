@@ -4,6 +4,7 @@ import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:project_1/screen/admin/AD_dashboard.dart';
 import 'package:project_1/screen/login.dart';
 import 'package:project_1/screen/mainlayout.dart';
 import 'package:project_1/screen/ticket.dart';
@@ -189,6 +190,8 @@ class _AccountState extends State<Account> {
               ),
             ),
           ),
+
+
           GestureDetector(
             onTap: () {
               Navigator.push(
@@ -223,11 +226,11 @@ class _AccountState extends State<Account> {
               ),
             ),
           ),
-          SizedBox(
-            height: 50,
-          ),
+
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardPage(),),);
+            },
             child: Container(
               width: size.width * 0.9,
               margin: EdgeInsets.symmetric(vertical: 16),
@@ -236,10 +239,47 @@ class _AccountState extends State<Account> {
                 children: [
                   Row(
                     children: [
-                      HeroIcon(HeroIcons.informationCircle, color: yellow,),
+                      HeroIcon(HeroIcons.chartBar,color: yellow,),
                       Gap(16),
                       Text(
-                        'About',
+                        'Dashboard',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  HeroIcon(HeroIcons.chevronRight, color: white,),
+
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VoucherPage(),
+                ),
+              );
+            },
+            child: Container(
+              width: size.width * 0.9,
+              margin: EdgeInsets.symmetric(vertical: 16),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      HeroIcon(HeroIcons.checkBadge, color: yellow,),
+                      Gap(16),
+                      Text(
+                        'Voucher',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w400,
@@ -253,6 +293,7 @@ class _AccountState extends State<Account> {
               ),
             ),
           ),
+
           GestureDetector(
             onTap: () {},
             child: Container(

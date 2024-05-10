@@ -298,65 +298,65 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
 
 
               //UPLOAD FILE/FOLDER--------------------------------------
-              // Text(
-              //   'Heading',
-              //   style: TextStyle(fontSize: 18, fontWeight: medium),
-              // ),
-              // Gap(16),
-              // //BODY 2
-              // Column(
-              //   children: [
-              //     Row(
-              //       children: [
-              //         Container(
-              //           width: size.width / 2 + 16,
-              //           margin: EdgeInsets.only(right: 8),
-              //           child: TextFormField(
-              //             //controller: ..,
-              //             style: TextStyle(color: white),
-              //             decoration: InputDecoration(
-              //               border: OutlineInputBorder(
-              //                 borderSide: BorderSide.none,
-              //                 borderRadius: BorderRadius.circular(10),
-              //               ),
-              //               hintText: 'Search',
-              //               hintStyle: TextStyle(
-              //                   color: white.withOpacity(0.6),
-              //                   fontWeight: light),
-              //               filled: true,
-              //               fillColor: white.withOpacity(0.1),
-              //               prefixIconColor: white,
-              //             ),
-              //           ),
-              //         ),
-              //         Gap(10),
-              //         Container(
-              //           padding: EdgeInsets.all(16),
-              //           decoration: BoxDecoration(
-              //             color: yellow.withOpacity(0.2),
-              //             borderRadius: BorderRadius.circular(50),
-              //           ),
-              //           child: HeroIcon(
-              //             HeroIcons.plus,
-              //             color: yellow,
-              //           ),
-              //         ),
-              //         Gap(10),
-              //         Container(
-              //           padding: EdgeInsets.all(16),
-              //           decoration: BoxDecoration(
-              //             color: pink.withOpacity(0.2),
-              //             borderRadius: BorderRadius.circular(50),
-              //           ),
-              //           child: HeroIcon(
-              //             HeroIcons.arrowUp,
-              //             color: pink,
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
+              Text(
+                'Heading',
+                style: TextStyle(fontSize: 18, fontWeight: medium),
+              ),
+              Gap(16),
+              //BODY 2
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: size.width / 2 + 16,
+                        margin: EdgeInsets.only(right: 8),
+                        child: TextFormField(
+                          //controller: ..,
+                          style: TextStyle(color: white),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                color: white.withOpacity(0.6),
+                                fontWeight: light),
+                            filled: true,
+                            fillColor: white.withOpacity(0.1),
+                            prefixIconColor: white,
+                          ),
+                        ),
+                      ),
+                      Gap(10),
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: yellow.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: HeroIcon(
+                          HeroIcons.plus,
+                          color: yellow,
+                        ),
+                      ),
+                      Gap(10),
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: pink.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: HeroIcon(
+                          HeroIcons.arrowUp,
+                          color: pink,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
 
               Gap(24),
 

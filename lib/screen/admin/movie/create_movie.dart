@@ -6,7 +6,7 @@ import 'package:project_1/screen/admin/movie/main_movie.dart';
 
 import '../../../style/style.dart';
 import '../../../test/test.dart';
-import 'component.dart';
+import '../component.dart';
 
 class CreateMovie extends StatefulWidget {
   const CreateMovie({super.key});
@@ -22,20 +22,26 @@ class _CreateMovieState extends State<CreateMovie> {
   //var
   final TextEditingController _age = TextEditingController();
   final TextEditingController _banner = TextEditingController();
-  final TextEditingController _date = TextEditingController();
   final TextEditingController _director = TextEditingController();
   final TextEditingController _genre = TextEditingController();
   final TextEditingController _image = TextEditingController();
-  final TextEditingController _movieID = TextEditingController();
   final TextEditingController _name = TextEditingController();
-  final TextEditingController _rating = TextEditingController();
   final TextEditingController _summary = TextEditingController();
   final TextEditingController _time = TextEditingController();
   final TextEditingController _trailer = TextEditingController();
-  final String _urlLink = 'movie/image/' ;
+  final TextEditingController _actorName = TextEditingController();
+  final TextEditingController _actorImamge = TextEditingController();
   late TextEditingController _dateOutPut = TextEditingController();
-  late DateTime _selectDate = DateTime.now();
+
+  final String _urlLinkImage = 'movie/image/';
+  final String _urlLinkBanner = 'movie/banner/';
+  final String _urlLinkActor = 'movie/actor/';
   late String _formatDate = '00/00/0000';
+  late DateTime _selectDate = DateTime.now();
+
+  List<Widget> _listActorDisplay = [];
+  late List<String> _listNameActor = [];
+  late List<String> _listImgLink = [];
 
   @override
   void initState() {
@@ -68,53 +74,113 @@ class _CreateMovieState extends State<CreateMovie> {
             children: [
               //HEADING 1
               Text(
-                'Movie',
+                'Create Movie',
                 style: TextStyle(fontSize: 18, fontWeight: medium),
               ),
               Gap(16),
               //BODY 1
-
               InputItem(
-                size: size,
                 input: _name,
                 hintText: 'name',
               ),
               InputItem(
-                size: size,
                 input: _age,
                 hintText: 'age',
               ),
-              // InputItem(size: size, input: _banner, hintText: 'banner',),
-              // InputItem(size: size, input: _date, hintText: 'date',),
               InputItem(
-                size: size,
                 input: _director,
                 hintText: 'director',
               ),
               InputItem(
-                size: size,
                 input: _genre,
                 hintText: 'genre',
               ),
-              // InputItem(size: size, input: _image, hintText: 'image',),
 
               InputItem(
-                size: size,
-                input: _rating,
-                hintText: 'rating',
-              ),
-              InputItem(
-                size: size,
                 input: _summary,
                 hintText: 'summary',
               ),
               InputItem(
-                size: size,
                 input: _time,
                 hintText: 'time',
               ),
+              InputItem(
+                input: _trailer,
+                hintText: 'trailerUrl',
+              ),
+              Gap(20),
+              Text(
+                'List Actor',
+                style: TextStyle(fontSize: 18, fontWeight: medium),
+              ),
 
-              // InputItem(size: size, input: _trailer, hintText: 'trailer',),
+              Row(
+                children: [
+                  Column(children: _listActorDisplay.map((e) => e).toList()),
+                  Column(children: _listActorDisplay.map((e) => GestureDetector (
+                    onTap: (){
+                      setState(() {
+                        _deleteActor(_listActorDisplay.indexOf(e));
+                      });
+
+                    },
+                    child: Container(
+
+                      margin: EdgeInsets.only(left: 30),
+                      padding: EdgeInsets.only(top: 30),
+                      width: size.width * 0.2,
+                      height: size.width * 0.2,
+                      child: Text('delete'+_listActorDisplay.indexOf(e).toString()),
+                    ),
+                  ),).toList()),
+                  // Column(
+                  //   children: [
+                  //     for (int i = 0; i < _listActorDisplay.length; i++)
+                  //       GestureDetector (
+                  //         onTap: (){},
+                  //         child: Container(
+                  //           color: Colors.red,
+                  //           margin: EdgeInsets.only(left: 30),
+                  //           padding: EdgeInsets.only(top: 30),
+                  //           width: size.width * 0.2,
+                  //           height: size.width * 0.2,
+                  //           child: Text('hello'),
+                  //         ),
+                  //       ),
+                  //   ],
+                  // ),
+                ],
+              ),
+
+              Gap(20),
+              Row(
+                children: [
+                  InputActor(
+                    urlLinkImage: _urlLinkActor,
+                    imgOutPut: _actorImamge,
+                    input: _actorName,
+                    hintText: 'actor name',
+                  ),
+                  Gap(10),
+                  GestureDetector(
+                    onTap: _addActor,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: yellow.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: HeroIcon(
+                        HeroIcons.plus,
+                        color: yellow,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Gap(16),
+              //BODY 2
               Gap(24),
               DateInput(
                 name: 'choose date',
@@ -124,79 +190,87 @@ class _CreateMovieState extends State<CreateMovie> {
               ),
               Gap(32),
 
-              // UPLOAD FILE/FOLDER--------------------------------------
-              // Text(
-              //   'Heading',
-              //   style: TextStyle(fontSize: 18, fontWeight: medium),
-              // ),
-              // Gap(16),
-              //BODY 2
-              // Column(
-              //   children: [
-              //     Row(
-              //       children: [
-              //         // Container(
-              //         //   width: size.width / 2 + 16,
-              //         //   margin: EdgeInsets.only(right: 8),
-              //         //   child: TextFormField(
-              //         //     //controller: ..,
-              //         //     style: TextStyle(color: white),
-              //         //     decoration: InputDecoration(
-              //         //       border: OutlineInputBorder(
-              //         //         borderSide: BorderSide.none,
-              //         //         borderRadius: BorderRadius.circular(10),
-              //         //       ),
-              //         //       hintText: 'Search',
-              //         //       hintStyle: TextStyle(
-              //         //           color: white.withOpacity(0.6),
-              //         //           fontWeight: light),
-              //         //       filled: true,
-              //         //       fillColor: white.withOpacity(0.1),
-              //         //       prefixIconColor: white,
-              //         //     ),
-              //         //   ),
-              //         // ),
-              //         Gap(10),
-              //         // Container(
-              //         //   padding: EdgeInsets.all(16),
-              //         //   decoration: BoxDecoration(
-              //         //     color: yellow.withOpacity(0.2),
-              //         //     borderRadius: BorderRadius.circular(50),
-              //         //   ),
-              //         //   child: HeroIcon(
-              //         //     HeroIcons.plus,
-              //         //     color: yellow,
-              //         //   ),
-              //         // ),
-              //         Gap(10),
-              //         GestureDetector(
-              //           onTap: () {
-              //             Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                 builder: (context) => Test(urlLink: _urlLink, urlOutPut: _image,),
-              //               ),
-              //             );
-              //           },
-              //           child: Container(
-              //             padding: EdgeInsets.all(16),
-              //             decoration: BoxDecoration(
-              //               color: pink.withOpacity(0.2),
-              //               borderRadius: BorderRadius.circular(50),
-              //             ),
-              //             child: HeroIcon(
-              //               HeroIcons.arrowUp,
-              //               color: pink,
-              //             ),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-
-              Container(),
-
+              Row(
+                children: [
+                  Container(
+                    width: 200,
+                    height: 200,
+                    child: _image.text != ''
+                        ? Image.network(_image.text)
+                        : Image.network(
+                            'https://cdn.icon-icons.com/icons2/2248/PNG/512/null_icon_135358.png'),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Test(
+                                urlLink: _urlLinkImage,
+                                urlOutPut: _image,
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: pink.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: HeroIcon(
+                          HeroIcons.arrowUp,
+                          color: pink,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Gap(10),
+              Row(
+                children: [
+                  Container(
+                    width: 200,
+                    height: 200,
+                    child: _banner.text != ''
+                        ? Image.network(_banner.text)
+                        : Image.network(
+                            'https://cdn.icon-icons.com/icons2/2248/PNG/512/null_icon_135358.png'),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Test(
+                                urlLink: _urlLinkBanner,
+                                urlOutPut: _banner,
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: pink.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: HeroIcon(
+                          HeroIcons.arrowUp,
+                          color: pink,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Gap(24),
 
               //SAVE BUTTON
@@ -204,6 +278,8 @@ class _CreateMovieState extends State<CreateMovie> {
                 onTap: () {
                   setState(() {
                     _repository.createMovie(
+                      actorName: _listNameActor,
+                      actorImage: _listImgLink,
                       name: _name.text,
                       image: _image.text,
                       banner: _banner.text,
@@ -246,41 +322,25 @@ class _CreateMovieState extends State<CreateMovie> {
       ),
     );
   }
-}
-
-class InputItem extends StatelessWidget {
-  Size size;
-  TextEditingController input;
-  String hintText;
-
-  InputItem(
-      {required this.size,
-      required this.input,
-      required this.hintText,
-      super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      width: size.width,
-      child: TextFormField(
-        controller: input,
-        style: TextStyle(color: white),
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          hintText: hintText,
-          label: Text(hintText),
-          hintStyle:
-              TextStyle(color: white.withOpacity(0.6), fontWeight: light),
-          filled: true,
-          fillColor: white.withOpacity(0.1),
-          prefixIconColor: white,
-        ),
-      ),
-    );
+  Future<void> _deleteActor(int index) async{
+    await _listActorDisplay.removeAt(index);
+    await _listImgLink.removeAt(index);
+    await _listNameActor.removeAt(index);
+  }
+  void _addActor() {
+    setState(() {
+      InputActor(
+        urlLinkImage: _urlLinkActor,
+        imgOutPut: _actorImamge,
+        input: _actorName,
+        hintText: 'actor name',
+      );
+      _listNameActor.add(_actorName.text);
+      _listImgLink.add(_actorImamge.text);
+      _listActorDisplay.add(DisplayActor(
+        actor: _actorName.text,
+        img: _actorImamge.text,
+      ));
+    });
   }
 }

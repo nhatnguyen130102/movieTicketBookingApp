@@ -6,13 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
 
-import '../screen/admin/movie/create_movie.dart';
 import '../style/style.dart';
 
 class Test extends StatefulWidget {
   String urlLink;
   TextEditingController urlOutPut;
-  Test({ required this.urlLink, required this.urlOutPut, super.key});
+  Test({required this.urlLink, required this.urlOutPut, super.key});
 
   @override
   State<Test> createState() => _TestState();
@@ -21,7 +20,7 @@ class Test extends StatefulWidget {
 class _TestState extends State<Test> {
   PlatformFile? pickedFile;
   UploadTask? uploadTask;
-
+  late TextEditingController _progess = TextEditingController();
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result == null) return;
@@ -39,7 +38,7 @@ class _TestState extends State<Test> {
     setState(() {
       uploadTask = ref.putFile(file);
     });
-    
+
     final snapshot = await uploadTask!.whenComplete(() {});
 
     // đường dẫn của hình ảnh, đem về gán vào mục tương ứng
@@ -48,8 +47,12 @@ class _TestState extends State<Test> {
     setState(() {
       uploadTask = null;
       widget.urlOutPut.text = urlDownload;
-      // cần trả về được đường link để gán vào data
-      Navigator.pop(context);
+      if(_progess.text == '1.0'){ 
+        Navigator.pop(context);
+      }
+      // buildProgress();
+      // // cần trả về được đường link để gán vào data
+      // Navigator.pop(context);
     });
   }
 
@@ -71,7 +74,7 @@ class _TestState extends State<Test> {
       body: Center(
         child: Column(
           children: [
-            if(pickedFile != null)
+            if (pickedFile != null)
               Expanded(
                 child: Container(
                   color: Colors.blue,
@@ -85,6 +88,7 @@ class _TestState extends State<Test> {
                 ),
               ),
             Gap(32),
+            buildProgress(),
             ElevatedButton(
               child: Text('select file'),
               onPressed: selectFile,
@@ -93,41 +97,41 @@ class _TestState extends State<Test> {
               onPressed: uploadFile,
               child: Text('upload file'),
             ),
-            // buildProgress(),
           ],
         ),
       ),
     );
   }
-  // Widget buildProgress() => StreamBuilder<TaskSnapshot>(
-  //   stream: uploadTask?.snapshotEvents,
-  //   builder: (context,snapshot){
-  //     if(snapshot.hasData){
-  //       final data = snapshot.data!;
-  //       double progess = data.bytesTransferred / data.totalBytes;
-  //       return SizedBox(
-  //         height: 50,
-  //         child: Stack(
-  //           fit: StackFit.expand,
-  //           children: [
-  //             LinearProgressIndicator(
-  //               value: progess,
-  //               backgroundColor: Colors.grey,
-  //               color: Colors.green,
-  //             ),
-  //             Center(
-  //               child: Text(
-  //                 '${(100 * progess).roundToDouble()}%',
-  //                 style: TextStyle(color: white),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     }
-  //     else {
-  //       return Gap(50);
-  //     }
-  //   },
-  // );
+
+  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+        stream: uploadTask?.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final data = snapshot.data!;
+            double progess = data.bytesTransferred / data.totalBytes;
+            _progess.text = progess.toString();
+            return SizedBox(
+              height: 50,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  LinearProgressIndicator(
+                    value: progess,
+                    backgroundColor: Colors.grey,
+                    color: Colors.green,
+                  ),
+                  Center(
+                    child: Text(
+                      '${(100 * progess).roundToDouble()}% pro: ${progess}',
+                      style: TextStyle(color: white),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Gap(50);
+          }
+        },
+      );
 }

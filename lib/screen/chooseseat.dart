@@ -48,7 +48,7 @@ class _SeatPageState extends State<ChooseSeat> {
   late List<String> _booked;
   final int _maximunTicket = 8;
   late double _subtotal = 0;
-  final double _priceOfTicket = 60000;
+  final double _priceOfTicket = 5.6;
   final List<int> _listCenterSeatRow = [3, 4, 5, 6];
   final List<int> _listCenterSeatColumn = [2, 3, 4, 5, 6];
   late Future<List<String?>> _listBooked;
@@ -596,7 +596,7 @@ class _SeatPageState extends State<ChooseSeat> {
                           child: Row(
                             children: [
                               Text(
-                                _subtotal.toString() + ' đ',
+                                _subtotal.toStringAsFixed(2) + ' đ',
                                 style: TextStyle(
                                     color: black,
                                     fontWeight: semibold,

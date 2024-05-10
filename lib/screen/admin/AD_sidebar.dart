@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:project_1/screen/admin/AD_dashboard.dart';
 import 'package:project_1/screen/admin/movie/main_movie.dart';
-
+import 'package:project_1/screen/admin/screening/main_screenig.dart';
 import 'package:project_1/screen/admin/user/main_user.dart';
 import 'package:project_1/screen/admin/voucher/detail_voucher.dart';
 
@@ -29,7 +30,12 @@ class _SidebarPageState extends State<SidebarPage> {
               HeroIcons.chevronLeft,
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DashboardPage(),
+                ),
+              );
             },
           ),
           // title: Text('Name movie ${widget.number}'),
@@ -98,14 +104,21 @@ class _SidebarPageState extends State<SidebarPage> {
                   style: itemstyle,
                 ),
               ),
-              Gap(16),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  'Screenings',
-                  style: itemstyle,
-                ),
-              ),
+              // Gap(16),
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => MainScreening(),
+              //       ),
+              //     );
+              //   },
+              //   child: Text(
+              //     'Screenings',
+              //     style: itemstyle,
+              //   ),
+              // ),
               Gap(64),
               GestureDetector(
                 onTap: () {},

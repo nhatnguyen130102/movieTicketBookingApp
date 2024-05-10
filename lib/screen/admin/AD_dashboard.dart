@@ -2,14 +2,14 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:project_1/screen/account.dart';
+import 'package:project_1/screen/mainlayout.dart';
 import 'package:project_1/style/style.dart';
 
 import '../../component_widget/loading.dart';
 import '../../model/movie_model.dart';
 import '../../repository/movie_repository.dart';
-
 import 'AD_sidebar.dart';
-import 'voucher/detail_voucher.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -41,13 +41,17 @@ class _DashboardPageState extends State<DashboardPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Account(),
+              ),
+            );
           },
         ),
         actions: [
           Row(
             children: [
-
               Container(
                 margin: EdgeInsets.only(right: 20),
                 child: GestureDetector(
@@ -76,7 +80,10 @@ class _DashboardPageState extends State<DashboardPage> {
               //Top Movies List
               Container(
                 width: size.width,
-                child: Text('Movie List', style: TextStyle(fontWeight: medium, fontSize: 24),),
+                child: Text(
+                  'Movie List',
+                  style: TextStyle(fontWeight: medium, fontSize: 24),
+                ),
                 //tương tự Actors List
               ),
               Gap(16),
@@ -105,7 +112,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             borderRadius: BorderRadius.circular(20),
                             // Đặt bán kính của góc bo tròn
                             child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5),
+                                margin: EdgeInsets.symmetric(horizontal: 5),
                                 width: 100,
                                 height: 100,
                                 child: Image.network(

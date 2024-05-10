@@ -55,38 +55,19 @@ class _MainLayoutState extends State<MainLayout> {
           ),
         ),
         actions: [
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchPage(),
-                      ),
-                    );
-                  },
-                  child: HeroIcon(HeroIcons.magnifyingGlass),
-                ),
-              ),
-
-              Container(
-                margin: EdgeInsets.only(right: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DashboardPage(),
-                      ),
-                    );
-                  },
-                  child: HeroIcon(HeroIcons.chartBar),
-                ),
-              ),
-            ],
+          Container(
+            margin: EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchPage(),
+                  ),
+                );
+              },
+              child: HeroIcon(HeroIcons.magnifyingGlass),
+            ),
           ),
         ],
       ),

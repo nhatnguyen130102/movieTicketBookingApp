@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -73,7 +74,60 @@ class MovieRepository {
     }
   }
 
+  Future<void> editMovie({
+    required List<String> actorName,
+    required List<String> actorImage,
+    required String name,
+    required String image,
+    required String banner,
+    required String age,
+    required String summary,
+    required String date,
+    required String trailer,
+    required String genre,
+    required String director,
+    required double rating,
+    required String time,
+    required String movieID,
+  }) async {
+    try {
+      QuerySnapshot querySnapshot = await _firebase.collection('movie').doc(movieID).collection('actor').get();
+      List<Actor> _item = querySnapshot.docs.map((e) => Actor.fromMap(e)).toList();
+      _firebase.collection('movie').doc(movieID).collection('actor').get().then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs){
+          ds.reference.delete();
+        };
+      });  await _firebase.collection('movie').doc(movieID).set({
+        'movieID': movieID,
+        'name': name,
+        'image': image,
+        'banner': banner,
+        'age': age,
+        'summary': summary,
+        'date': date,
+        'trailer': trailer,
+        'genre': genre,
+        'director': director,
+        'rating': rating,
+        'time': time,
+      });
+      int _count = 1;
+      for(String item in actorName){
+        String _nameDoc = 'actor' + _count.toString();
+        Map<String, dynamic> actor = {
+          'name': item,
+          'image': actorImage[actorName.indexOf(item)],
+        };
+        await _firebase.collection('movie').doc(movieID).collection('actor').doc(_nameDoc).set(actor,SetOptions(merge: false));
+        _count++;
+      }
+      } catch (e) {
+      throw Exception('Failed to create voucher: $e');
+    }
+  }
   Future<void> createMovie({
+    required List<String> actorName,
+    required List<String> actorImage,
     required String name,
     required String image,
     required String banner,
@@ -87,6 +141,8 @@ class MovieRepository {
     required String time,
   }) async {
     try {
+
+
       String todayFormatID = DateFormat('ddMMyyyyhhmmss').format(DateTime.now());
       String movieID = 'movie' + todayFormatID;
       await _firebase.collection('movie').doc(movieID).set({
@@ -103,6 +159,16 @@ class MovieRepository {
         'rating': rating,
         'time': time,
       });
+      int _count = 1;
+      for(String item in actorName){
+        String _nameDoc = 'actor' + _count.toString();
+        Map<String, dynamic> actor = {
+          'name': item,
+          'image': actorImage[actorName.indexOf(item)],
+        };
+        await _firebase.collection('movie').doc(movieID).collection('actor').doc(_nameDoc).set(actor);
+        _count++;
+      }
     } catch (e) {
       throw Exception('Failed to create voucher: $e');
     }

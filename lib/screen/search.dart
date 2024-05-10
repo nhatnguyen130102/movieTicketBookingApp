@@ -218,7 +218,7 @@ class _SearchPageState extends State<SearchPage> {
                                                           Gap(6),
                                                           Text(
                                                             _itemMovie.rating
-                                                                .toString(),
+                                                                .toStringAsFixed(1),
                                                             style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:

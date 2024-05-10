@@ -291,7 +291,7 @@ class _Choose_DateState extends State<Choose_Date> {
                                       ),
                                       Gap(8),
                                       Text(
-                                        SnapShot.data!.rating.toString(),
+                                        SnapShot.data!.rating.toStringAsFixed(1),
                                         style: TextStyle(
                                           fontWeight: medium,
                                           fontSize: 16,
