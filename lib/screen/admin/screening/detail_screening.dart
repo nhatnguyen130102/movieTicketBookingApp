@@ -29,7 +29,7 @@ class _DetailScreeningState extends State<DetailScreening> {
   FormatRepository _formatRepository = FormatRepository();
   CinemaRepository _cinemaRepository = CinemaRepository();
 
-//var
+  //var
 
   final TextEditingController _time = TextEditingController();
   final TextEditingController _room = TextEditingController();
@@ -233,7 +233,6 @@ class _DetailScreeningState extends State<DetailScreening> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -298,7 +297,13 @@ class _DetailScreeningState extends State<DetailScreening> {
                                       room: _room.text,
                                     );
                                     setState(() {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreening(movieID: widget.movieID),),);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainScreening(
+                                              movieID: widget.movieID),
+                                        ),
+                                      );
                                     });
                                   },
                                   child: Container(
@@ -410,7 +415,13 @@ class _DetailScreeningState extends State<DetailScreening> {
                                       room: _room.text,
                                     );
                                     setState(() {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreening(movieID: widget.movieID),),);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainScreening(
+                                              movieID: widget.movieID),
+                                        ),
+                                      );
                                     });
                                   },
                                   child: Container(

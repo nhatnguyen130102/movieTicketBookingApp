@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:project_1/newDire/phone.dart';
+import 'package:project_1/login_phone_email/phone.dart';
+import 'package:project_1/login_phone_email/success.dart';
+
 import 'dart:io' as io show Platform;
 
-import 'package:project_1/newDire/success.dart';
 
 import 'entry.dart';
 import 'otp.dart';

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:project_1/screen/mainlayout.dart';
 import 'package:project_1/test/test.dart';
+import 'package:project_1/test/testLocation.dart';
 
 import 'api/firebase_api.dart';
 import 'firebase_options.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         //   bodyMedium: GoogleFonts.oswald(textStyle: textTheme.bodyMedium),
         // ),
       ),
-      home: MainLayout(),
+      home: MyHomePage(title: 'abc',),
     );
   }
 }

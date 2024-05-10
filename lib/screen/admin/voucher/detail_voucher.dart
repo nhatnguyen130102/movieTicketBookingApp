@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
+import 'package:project_1/model/voucher_model.dart';
 import 'package:project_1/repository/voucher_repository.dart';
-import 'package:project_1/screen/mainlayout.dart';
 
 import '../../../style/style.dart';
+import '../component.dart';
+import 'main_voucher.dart';
 
-class VoucherEditorPage extends StatefulWidget {
-  const VoucherEditorPage({super.key});
+class DetailVoucher extends StatefulWidget {
+  String voucherID;
+
+  DetailVoucher({required this.voucherID, super.key});
 
   @override
-  State<VoucherEditorPage> createState() => _VoucherEditorPageState();
+  State<DetailVoucher> createState() => _DetailVoucherState();
 }
 
-class _VoucherEditorPageState extends State<VoucherEditorPage> {
+class _DetailVoucherState extends State<DetailVoucher> {
   //repository
   VoucherRepository _voucherRepository = VoucherRepository();
 
@@ -22,16 +26,21 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
   final TextEditingController _valueController = TextEditingController();
-  late String _expDateController;
-  late String _validDateController;
+  final TextEditingController _dateExpOutPut = TextEditingController();
+  final TextEditingController _dateValidOutPut = TextEditingController();
+
+  // late String _expDateController;
+  // late String _validDateController;
 
   late bool _isExtraPointController = false;
-  late bool _statusController = false;
+  late bool _statusController = true;
   final TextEditingController _voucherIDController = TextEditingController();
   final TextEditingController _headingController = TextEditingController();
 
-  late DateTime _selectExp;
-  late DateTime _selectValid;
+  late Future<VoucherModel> _itemScreening;
+
+  late DateTime _selectExp = DateTime.now();
+  late DateTime _selectValid = DateTime.now();
 
   late String _formatExp = '00/00/0000';
   late String _formatVilid = '00/00/0000';
@@ -39,43 +48,61 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
   @override
   void initState() {
     super.initState();
-    _selectExp = DateTime.now();
-    _formatExp = DateFormat('dd/MM/yyyy').format(_selectExp);
-    _selectValid = DateTime.now();
-    _formatVilid = DateFormat('dd/MM/yyyy').format(_selectValid);
+    _itemScreening = _voucherRepository.getVoucherDetail(widget.voucherID);
+    getScreening();
+    setState(() {});
   }
 
-  Future<void> _expDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectExp,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != _selectExp) {
-      setState(() {
-        _selectExp = pickedDate;
-        _formatExp = DateFormat('dd/MM/yyyy').format(pickedDate);
-        _expDateController = _formatExp;
-      });
-    }
+  Future<void> getScreening() async {
+    VoucherModel? _modun = await _itemScreening;
+    _dateExpOutPut.text = _modun!.expDate;
+    _dateValidOutPut.text = _modun!.validDate;
+    _formatVilid = _modun.validDate;
+    _formatExp = _modun!.expDate;
+    _titleController.text = _modun!.title;
+    _bodyController.text = _modun!.body;
+    _valueController.text = _modun!.value.toString();
+    _voucherIDController.text = widget.voucherID;
+    _headingController.text = _modun!.heading;
+    _isExtraPointController = _modun!.isExtraPoint;
+    final DateFormat format = DateFormat('dd/MM/yyyy');
+    setState(() {
+      _selectExp = format.parse(_modun!.expDate);
+      _selectValid = format.parse(_modun!.validDate);
+    });
   }
 
-  Future<void> _validDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectValid,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (pickedDate != null && pickedDate != _selectValid) {
-      setState(() {
-        _selectValid = pickedDate;
-        _formatVilid = DateFormat('dd/MM/yyyy').format(pickedDate);
-        _validDateController = _formatVilid;
-      });
-    }
-  }
+  // Future<void> _expDate(BuildContext context) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: _selectExp,
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (pickedDate != null && pickedDate != _selectExp) {
+  //     setState(() {
+  //       _selectExp = pickedDate;
+  //       _formatExp = DateFormat('dd/MM/yyyy').format(pickedDate);
+  //       _dateExpOutPut.text = _formatExp;
+  //     });
+  //   }
+  // }
+
+  // Future<void> _validDate(BuildContext context) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: _selectValid,
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (pickedDate != null && pickedDate != _selectValid) {
+  //     setState(() {
+  //       _selectValid = pickedDate;
+  //       _formatVilid = DateFormat('dd/MM/yyyy').format(pickedDate);
+  //       _validDateController = _formatVilid;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -106,74 +133,14 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
                 'Voucher',
                 style: TextStyle(fontSize: 18, fontWeight: medium),
               ),
+
               Gap(16),
               //BODY 1
               Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
                 width: size.width,
                 child: TextFormField(
-                  controller: _titleController,
-                  style: TextStyle(color: white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: 'Title',
-                    label: Text('Title'),
-                    hintStyle: TextStyle(
-                        color: white.withOpacity(0.6), fontWeight: light),
-                    filled: true,
-                    fillColor: white.withOpacity(0.1),
-                    prefixIconColor: white,
-                  ),
-                ),
-              ),
-              Gap(10),
-              Container(
-                width: size.width,
-                child: TextFormField(
-                  controller: _bodyController,
-                  style: TextStyle(color: white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: 'Body',
-                    label: Text('Body'),
-                    hintStyle: TextStyle(
-                        color: white.withOpacity(0.6), fontWeight: light),
-                    filled: true,
-                    fillColor: white.withOpacity(0.1),
-                    prefixIconColor: white,
-                  ),
-                ),
-              ),
-              Gap(10),
-              Container(
-                width: size.width,
-                child: TextFormField(
-                  controller: _headingController,
-                  style: TextStyle(color: white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: 'Heading',
-                    label: Text('Heading'),
-                    hintStyle: TextStyle(
-                        color: white.withOpacity(0.6), fontWeight: light),
-                    filled: true,
-                    fillColor: white.withOpacity(0.1),
-                    prefixIconColor: white,
-                  ),
-                ),
-              ),
-              Gap(10),
-              Container(
-                width: size.width,
-                child: TextFormField(
+                  readOnly: true,
                   controller: _voucherIDController,
                   style: TextStyle(color: white),
                   decoration: InputDecoration(
@@ -181,8 +148,8 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    hintText: 'Voucher ID',
-                    label: Text('Voucher ID'),
+                    hintText: 'voucherID',
+                    label: Text('voucherID'),
                     hintStyle: TextStyle(
                         color: white.withOpacity(0.6), fontWeight: light),
                     filled: true,
@@ -191,28 +158,23 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
                   ),
                 ),
               ),
-              Gap(10),
-              Container(
-                width: size.width,
-                child: TextFormField(
-                  controller: _valueController,
-                  style: TextStyle(color: white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    hintText: 'Value',
-                    label: Text('Value'),
-                    hintStyle: TextStyle(
-                        color: white.withOpacity(0.6), fontWeight: light),
-                    filled: true,
-                    fillColor: white.withOpacity(0.1),
-                    prefixIconColor: white,
-                  ),
-                ),
+              InputItem(
+                input: _titleController,
+                hintText: 'title',
               ),
-              Gap(16),
+              InputItem(
+                input: _bodyController,
+                hintText: 'body',
+              ),
+              InputItem(
+                input: _valueController,
+                hintText: 'value',
+              ),
+
+              InputItem(
+                input: _headingController,
+                hintText: 'heading',
+              ),
 
               Row(
                 children: [
@@ -233,155 +195,129 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
               ),
 
               Gap(24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Valid Date', style: TextStyle(color: white.withOpacity(0.6))),
-                      Gap(4),
-                      Text(
-                        _formatExp,
-                        style:
-                        TextStyle(fontWeight: semibold, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _expDate(context);
-                    },
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: HeroIcon(HeroIcons.calendar, color: white,)
-                    ),
-                  ),
-                ],
+              DateInput(
+                name: 'choose date EXP',
+                outPutDate: _dateExpOutPut,
+                formatDate: _formatExp,
+                selectDate: _selectExp,
               ),
 
               Gap(32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Expiry Date', style: TextStyle(color: white.withOpacity(0.6))),
-                      Gap(4),
-                      Text(
-                        _formatVilid,
-                        style:
-                        TextStyle(fontWeight: semibold, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _validDate(context);
-                    },
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: HeroIcon(HeroIcons.calendar, color: white,)
-                    ),
-                  ),
-                ],
+              DateInput(
+                name: 'choose date Valid',
+                outPutDate: _dateValidOutPut,
+                formatDate: _formatVilid,
+                selectDate: _selectValid,
               ),
-
 
               //UPLOAD FILE/FOLDER--------------------------------------
-              Text(
-                'Heading',
-                style: TextStyle(fontSize: 18, fontWeight: medium),
-              ),
-              Gap(16),
-              //BODY 2
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: size.width / 2 + 16,
-                        margin: EdgeInsets.only(right: 8),
-                        child: TextFormField(
-                          //controller: ..,
-                          style: TextStyle(color: white),
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            hintText: 'Search',
-                            hintStyle: TextStyle(
-                                color: white.withOpacity(0.6),
-                                fontWeight: light),
-                            filled: true,
-                            fillColor: white.withOpacity(0.1),
-                            prefixIconColor: white,
-                          ),
-                        ),
-                      ),
-                      Gap(10),
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: yellow.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: HeroIcon(
-                          HeroIcons.plus,
-                          color: yellow,
-                        ),
-                      ),
-                      Gap(10),
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: pink.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: HeroIcon(
-                          HeroIcons.arrowUp,
-                          color: pink,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
 
-              Gap(24),
+              Gap(32),
 
               //SAVE BUTTON
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _voucherRepository.createVoucher(
-                        body: _bodyController.text,
-                        expDate: _expDateController,
-                        heading: _headingController.text,
-                        isExtraPoint: _isExtraPointController,
-                        status: _statusController,
-                        title: _titleController.text,
-                        validDate: _validDateController,
-                        value: double.parse(_valueController.text.trim()),
-                        voucherID: _voucherIDController.text);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Center(
+                            child: Text(
+                              'Thông báo',
+                              style: TextStyle(
+                                color: black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          content: Container(
+                            width: size.width * 0.7,
+                            height: 40,
+                            child: Text(
+                              'Bạn có muôn sửa voucher?',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          actions: <Widget>[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.redAccent,
+                                    ),
+                                    height: 50,
+                                    width: 100,
+                                    child: Center(
+                                      child: Text(
+                                        'Cancle',
+                                        style: TextStyle(
+                                          color: white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    _voucherRepository.editVoucher(
+                                      voucherID: _voucherIDController.text,
+                                      body: _bodyController.text,
+                                      expDate: _dateExpOutPut.text,
+                                      heading: _headingController.text,
+                                      isExtraPoint: _isExtraPointController,
+                                      status: _statusController,
+                                      title: _titleController.text,
+                                      validDate: _dateValidOutPut.text,
+                                      value: double.parse(
+                                          _valueController.text.trim()),
+                                    );
+                                    setState(() {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainVoucher(),
+                                        ),
+                                      );
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.redAccent,
+                                    ),
+                                    height: 50,
+                                    width: 100,
+                                    child: Center(
+                                      child: Text(
+                                        'Confirm',
+                                        style: TextStyle(
+                                          color: white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   });
-                  // _createVoucher();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainLayout(),
-                    ),
-                  );
                 },
                 child: Container(
                   width: size.width,
@@ -391,9 +327,155 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    'SAVE',
+                    'EDIT',
                     style:
-                    TextStyle(fontSize: 16, color: black, fontWeight: bold),
+                        TextStyle(fontSize: 16, color: black, fontWeight: bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              Gap(10),
+              // ElevatedButton (
+              //   onPressed: () {
+              //     _voucherRepository.createVoucher(
+              //       body: _bodyController.text,
+              //       expDate: _expDateController,
+              //       heading: _headingController.text,
+              //       isExtraPoint: _isExtraPointController,
+              //       status: _statusController,
+              //       title: _titleController.text,
+              //       validDate: _validDateController,
+              //       value: double.parse(
+              //         _valueController.text.trim(),
+              //       ),
+              //     );
+              //     setState(() {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) => MainVoucher(),
+              //         ),
+              //       );
+              //     });
+              //
+              //   },
+              //   child: Text('create'),
+              // ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Center(
+                            child: Text(
+                              'Thông báo',
+                              style: TextStyle(
+                                color: black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          content: Container(
+                            width: size.width * 0.7,
+                            height: 40,
+                            child: Text(
+                              'Bạn có muôn tạo định voucher?',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          actions: <Widget>[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.redAccent,
+                                    ),
+                                    height: 50,
+                                    width: 100,
+                                    child: Center(
+                                      child: Text(
+                                        'Cancle',
+                                        style: TextStyle(
+                                          color: white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _voucherRepository.createVoucher(
+                                        body: _bodyController.text,
+                                        expDate: _dateExpOutPut.text,
+                                        heading: _headingController.text,
+                                        isExtraPoint: _isExtraPointController,
+                                        status: _statusController,
+                                        title: _titleController.text,
+                                        validDate: _dateValidOutPut.text,
+                                        value: double.parse(
+                                          _valueController.text.trim(),
+                                        ),
+                                      );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainVoucher(),
+                                        ),
+                                      );
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Colors.redAccent,
+                                    ),
+                                    height: 50,
+                                    width: 100,
+                                    child: Center(
+                                      child: Text(
+                                        'Confirm',
+                                        style: TextStyle(
+                                          color: white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  });
+                },
+                child: Container(
+                  width: size.width,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    color: yellow,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    'CREATE',
+                    style:
+                        TextStyle(fontSize: 16, color: black, fontWeight: bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -404,30 +486,4 @@ class _VoucherEditorPageState extends State<VoucherEditorPage> {
       ),
     );
   }
-
-// Future<void> _createVoucher() async {
-//   String title = _titleController.text.trim();
-//   String body = _bodyController.text.trim();
-//   double value = double.parse(_valueController.text.trim());
-//   String validDate = _validDateController;
-//   String expDate = _expDateController;
-//
-//   try {
-//     await _voucherRepository.createVoucher(
-//       title: title,
-//       body: body,
-//       value: value,
-//       validDate: validDate,
-//       expDate: expDate,
-//       status: true,
-//       heading: '',
-//       isExtraPoint: true,
-//       voucherID: '',
-//       // Add other parameters here
-//     );
-//     // Show success message or navigate to another page
-//   } catch (e) {
-//     // Show error message
-//   }
-// }
 }

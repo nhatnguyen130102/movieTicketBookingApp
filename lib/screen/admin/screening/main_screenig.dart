@@ -5,7 +5,7 @@ import 'package:project_1/repository/cinema_repository.dart';
 import 'package:project_1/repository/movie_repository.dart';
 import 'package:project_1/repository/screening_repository.dart';
 import 'package:project_1/screen/admin/movie/detail_movie.dart';
-import 'package:project_1/screen/admin/screening/create_screening.dart';
+
 
 import '../../../component_widget/loading.dart';
 import '../../../model/screening_model.dart';
@@ -227,19 +227,6 @@ class _MainScreeningState extends State<MainScreening> {
         ),
       ),
 
-      //Create New - Add button
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreateScreening()),
-          );
-        },
-        shape: CircleBorder(),
-        foregroundColor: pink,
-        backgroundColor: pink.withOpacity(0.2),
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

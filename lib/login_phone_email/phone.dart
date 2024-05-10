@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_1/style/style.dart';
 
 
 class MyPhone extends StatefulWidget {
@@ -69,33 +70,9 @@ class _MyPhoneState extends State<MyPhone> {
               children: [
 
 
-                Image.asset(
-                  'assets/img1.png',
-                  width: 150,
-                  height: 150,
-                ),
-
-
-                SizedBox(
-                  height: 25,
-                ),
-
-
                 Text(
-                  'Mã đăng nhập điện thoại',
+                  'Register',
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-
-
-                SizedBox(
-                  height: 10,
-                ),
-
-
-                Text(
-                  'Chúng tôi cần đăng kí số điện thoại của bạn trước khi bắt đầu',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
                 ),
 
 
@@ -104,10 +81,21 @@ class _MyPhoneState extends State<MyPhone> {
                 ),
 
 
-                TextFormField(
+                 TextFormField(
                   controller: countryCodeController,
                   decoration: InputDecoration(
-                    hintText: "Country Code",
+                    prefixIcon: Icon(
+                    Icons.code_outlined,
+                    color: white.withOpacity(0.8),
+                    ),
+                    filled: true,
+                    fillColor: white.withOpacity(0.1),
+                    hintText: "Country code",
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -126,7 +114,18 @@ class _MyPhoneState extends State<MyPhone> {
                 TextFormField(
                   controller: phoneNumberController,
                   decoration: InputDecoration(
-                    hintText: "Số điện thoại",
+                    prefixIcon: Icon(
+                    Icons.phone_outlined,
+                    color: white.withOpacity(0.8),
+                    ),
+                    filled: true,
+                    fillColor: white.withOpacity(0.1),
+                    hintText: "Phone number",
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -152,9 +151,9 @@ class _MyPhoneState extends State<MyPhone> {
                     onPressed: () {
                       verifyPhoneNumber(context);
                     },
-                    child: Text('Gửi mã', style: TextStyle(color: Colors.white)),
+                    child: Text('Send OTP', style: TextStyle(color: Colors.black)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade600,
+                      backgroundColor: Colors.yellow,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

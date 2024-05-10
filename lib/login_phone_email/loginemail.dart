@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project_1/newDire/success.dart';
+import 'package:project_1/login_phone_email/success.dart';
+import 'package:project_1/style/style.dart';
 
 
 class LoginEmail extends StatefulWidget {
@@ -94,27 +95,8 @@ class _LoginEmailState extends State<LoginEmail> {
             children: [
 
 
-              Image.asset(
-                'assets/img1.png',
-                width: 150,
-                height: 150,
-              ),
-
-
-              SizedBox(height: 25),
-
-
               Text(
-                'Đăng nhập bằng email',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-
-
-              SizedBox(height: 10),
-
-
-              Text(
-                'Vui lòng nhập địa chỉ email của bạn',
+                'Login',
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -123,14 +105,25 @@ class _LoginEmailState extends State<LoginEmail> {
               SizedBox(height: 30),
 
 
-              TextFormField(
+               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  hintText: 'example@yahoo.com',
+                  prefixIcon: Icon(
+                    Icons.mail,
+                    color: white.withOpacity(0.8),
+                    ),
+                    filled: true,
+                    fillColor: white.withOpacity(0.1),
+                    hintText: "Email",
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10.0),
+                    ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty || !value.contains('@')) {
-                    return 'Vui lòng nhập địa chỉ email hợp lệ';
+                    return 'Please enter a valid email';
                   }
                   return null;
                 },
@@ -140,18 +133,22 @@ class _LoginEmailState extends State<LoginEmail> {
               SizedBox(height: 20),
 
 
-              ElevatedButton(
-                onPressed: () {
-                  verifyAccount(context);
-                },
-                child: Text('Xác minh', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.shade600,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              SizedBox(
+                  height: 45,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      verifyAccount(context);
+                    },
+                    child: Text('Verify', style: TextStyle(color: Colors.black)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
                 ),
-              ),
 
 
               SizedBox(height: 20),
@@ -166,28 +163,25 @@ class _LoginEmailState extends State<LoginEmail> {
                 ),
 
 
-              SizedBox(height: 20),
+              SizedBox(height: 10),
 
 
-              ElevatedButton(
-                onPressed: isAccountVerified
-                    ? () {
-                        sendVerificationLink(context);
-                      }
-                    : null,
-                child: Text(
-                  'Gửi link',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isAccountVerified
-                      ? Colors.green.shade600
-                      : Colors.grey.shade400,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              SizedBox(
+                  height: 45,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      sendVerificationLink(context);
+                    },
+                    child: Text('Send link', style: TextStyle(color: Colors.black)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
                 ),
-              ),
 
               
             ],

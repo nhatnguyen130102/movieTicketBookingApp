@@ -4,10 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:gap/gap.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:project_1/screen/account.dart';
 import 'package:project_1/style/style.dart';
 import 'package:heroicons/heroicons.dart';
 
+import '../login_phone_email/email.dart';
+import '../login_phone_email/loginemail.dart';
+import '../login_phone_email/loginphone.dart';
+import '../login_phone_email/phone.dart';
+import '../login_phone_email/phoneAuth.dart';
 import '../repository/login_repository.dart';
 
 class Login extends StatefulWidget {
@@ -167,17 +173,19 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
+
                 children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey[200],
-                    ),
-                    child: Icon(Icons.apple_outlined),
-                  ),
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(horizontal: 10),
+                  //   width: 50,
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     color: Colors.grey[200],
+                  //   ),
+                  //   child: Icon(Icons.apple_outlined),
+                  // ),
+
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -195,6 +203,101 @@ class _LoginState extends State<Login> {
                       child: Icon(
                         FontAwesome.google,
                         weight: 0.5,
+                      ),
+                    ),
+                  ),
+
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPhone()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero, backgroundColor: Colors.grey[200],
+                      shape: CircleBorder(),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      width: 50,
+                      height: 50,
+                      child: Icon(
+                        FontAwesome.phone,
+                        size: 24, // Adjust the size according to your preference
+                        color: Colors.black, // Adjust the color according to your preference
+                      ),
+                    ),
+                  ),
+
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyPhone()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero, backgroundColor: Colors.grey[200],
+                      shape: CircleBorder(),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      width: 50,
+                      height: 50,
+                      child: Icon(
+                        FontAwesome.home,
+                        size: 24, // Adjust the size according to your preference
+                        color: Colors.black, // Adjust the color according to your preference
+                      ),
+                    ),
+                  ),
+
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyEmail()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero, backgroundColor: Colors.grey[200],
+                      shape: CircleBorder(),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      width: 50,
+                      height: 50,
+                      child: Icon(
+                        FontAwesome.mail,
+                        size: 24, // Adjust the size according to your preference
+                        color: Colors.black, // Adjust the color according to your preference
+                      ),
+                    ),
+                  ),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginEmail()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero, backgroundColor: Colors.grey[200],
+                      shape: CircleBorder(),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      width: 50,
+                      height: 50,
+                      child: Icon(
+                        FontAwesome.sun,
+                        size: 24, // Adjust the size according to your preference
+                        color: Colors.black, // Adjust the color according to your preference
                       ),
                     ),
                   ),
@@ -222,7 +325,7 @@ class _LoginState extends State<Login> {
       idToken: googleAuth?.idToken,
     );
     UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
 
     if (userCredential.user != null) {
       await _saveUserDataToFirestore(userCredential.user!);
@@ -237,11 +340,11 @@ class _LoginState extends State<Login> {
   Future<void> _saveUserDataToFirestore(User user) async {
     // Tạo một tài liệu mới trong Firestore với ID là UID của người dùng
     DocumentSnapshot documentSnapshot =
-        await _firestore.collection('user').doc(user.uid).get();
+    await _firestore.collection('user').doc(user.uid).get();
     String _itemUser = documentSnapshot.id;
     if (_itemUser.isEmpty) {
       final DocumentReference userDocRef =
-          _firestore.collection('user').doc(user.uid);
+      _firestore.collection('user').doc(user.uid);
       // Lưu thông tin người dùng vào tài liệu Firestore
       await userDocRef.set({
         'userID': user.uid,

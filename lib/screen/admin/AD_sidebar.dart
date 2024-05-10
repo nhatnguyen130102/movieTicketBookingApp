@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:project_1/screen/admin/AD_dashboard.dart';
+import 'package:project_1/screen/admin/cinema/main_cinema.dart';
+import 'package:project_1/screen/admin/format/main_format.dart';
+import 'package:project_1/screen/admin/location/main_location.dart';
 import 'package:project_1/screen/admin/movie/main_movie.dart';
-import 'package:project_1/screen/admin/screening/main_screenig.dart';
 import 'package:project_1/screen/admin/user/main_user.dart';
 import 'package:project_1/screen/admin/voucher/detail_voucher.dart';
+import 'package:project_1/screen/admin/voucher/main_voucher.dart';
 
 import '../../style/style.dart';
 
@@ -72,7 +75,7 @@ class _SidebarPageState extends State<SidebarPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => VoucherEditorPage(),
+                      builder: (context) => MainVoucher(),
                     ),
                   );
                 },
@@ -98,7 +101,14 @@ class _SidebarPageState extends State<SidebarPage> {
               ),
               Gap(16),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainCinema(),
+                    ),
+                  );
+                },
                 child: Text(
                   'Cinemas',
                   style: itemstyle,
@@ -121,7 +131,14 @@ class _SidebarPageState extends State<SidebarPage> {
               // ),
               Gap(64),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainFormat(),
+                    ),
+                  );
+                },
                 child: Text(
                   'Formats',
                   style: itemstyle,
@@ -129,7 +146,14 @@ class _SidebarPageState extends State<SidebarPage> {
               ),
               Gap(16),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainLocation(),
+                    ),
+                  );
+                },
                 child: Text(
                   'Locations',
                   style: itemstyle,

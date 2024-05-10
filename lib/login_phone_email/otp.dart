@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:project_1/style/style.dart';
 
 class Myotp extends StatefulWidget {
   final String verificationId;
@@ -23,7 +24,7 @@ class _MyotpState extends State<Myotp> {
       smsCode: otpController.text.trim(),
     );
     await auth.signInWithCredential(credential);
-    Navigator.pushNamed(context, 'success');
+    Navigator.pushNamed(context, 'mainlayout');
   } catch (e) {
     showDialog(
       context: context,
@@ -61,7 +62,7 @@ class _MyotpState extends State<Myotp> {
           },
           icon: Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),
@@ -73,41 +74,10 @@ class _MyotpState extends State<Myotp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
-
-              Image.asset(
-                'assets/img1.png',
-                width: 150,
-                height: 150,
-              ),
-
-
-              SizedBox(
-                height: 25,
-              ),
-
-
               Text(
-                'Mã đăng nhập điện thoại',
+                'Enter your OTP code',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-
-
-              SizedBox(
-                height: 10,
-              ),
-
-
-              Text(
-                'Chúng tôi cần đăng kí số điện thoại của bạn trước khi bắt đầu',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-
-
-              SizedBox(
-                height: 30,
-              ),
-
 
               SizedBox(
                 height: 10,
@@ -117,7 +87,18 @@ class _MyotpState extends State<Myotp> {
               TextFormField(
                 controller: otpController,
                 decoration: InputDecoration(
-                  hintText: "Mã OTP",
+                  prefixIcon: Icon(
+                    Icons.monitor_heart_outlined,
+                    color: white.withOpacity(0.8),
+                    ),
+                    filled: true,
+                    fillColor: white.withOpacity(0.1),
+                    hintText: "OTP code",
+                    hintStyle: TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(10.0),
+                    ),
                 ),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
@@ -145,9 +126,9 @@ class _MyotpState extends State<Myotp> {
                   onPressed: () {
                     signInWithOTP(context);
                   },
-                  child: Text('Xác nhận mã', style: TextStyle(color: Colors.white)),
+                  child: Text('Confirm', style: TextStyle(color: Colors.black)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green.shade600,
+                    backgroundColor: Colors.yellow,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -162,7 +143,7 @@ class _MyotpState extends State<Myotp> {
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(context, 'phone', (route) => false);
                       },
-                      child: Text('Thay đổi số điện thoại ?', style: TextStyle(color: Colors.black)))
+                      child: Text('Change your phone number ?', style: TextStyle(color: Colors.black)))
                 ],
               )
 

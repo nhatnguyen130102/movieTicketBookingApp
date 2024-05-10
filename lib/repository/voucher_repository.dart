@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_1/model/voucher_model.dart';
 
-
 class VoucherRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -14,6 +13,38 @@ class VoucherRepository {
   // }
 
   Future<void> createVoucher({
+    required String body,
+    required String expDate,
+    required String heading,
+    required bool isExtraPoint,
+    required bool status,
+    required String title,
+    required String validDate,
+    required double value,
+  }) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await _firestore.collection('voucher').get();
+      List<VoucherModel> _listVoucher =
+          querySnapshot.docs.map((e) => VoucherModel.fromFirestore(e)).toList();
+      String voucherID = 'voucher' + (_listVoucher.length + 1).toString();
+      await _firestore.collection('voucher').doc(voucherID).set({
+        'body': body,
+        'expDate': expDate,
+        'heading': heading,
+        'isExtraPoint': isExtraPoint,
+        'status': status,
+        'title': title,
+        'validDate': validDate,
+        'value': value,
+        'voucherID': voucherID,
+      });
+    } catch (e) {
+      throw Exception('Failed to create voucher: $e');
+    }
+  }
+
+  Future<void> editVoucher({
     required String body,
     required String expDate,
     required String heading,
@@ -43,21 +74,21 @@ class VoucherRepository {
 
   Future<List<VoucherModel>> getAllVouchers() async {
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('voucher').get();
-      return querySnapshot.docs.map((doc) => VoucherModel.fromFirestore(doc)).toList();
+      QuerySnapshot querySnapshot =
+          await _firestore.collection('voucher').get();
+      return querySnapshot.docs
+          .map((doc) => VoucherModel.fromFirestore(doc))
+          .toList();
     } catch (e) {
       throw Exception('Failed to get vouchers: $e');
     }
   }
 
-  Future<VoucherModel?> getVoucherDetail(String voucherID) async {
+  Future<VoucherModel> getVoucherDetail(String voucherID) async {
     try {
-      DocumentSnapshot docSnapshot = await _firestore.collection('voucher').doc(voucherID).get();
-      if (docSnapshot.exists) {
-        return VoucherModel.fromFirestore(docSnapshot);
-      } else {
-        return null;
-      }
+      DocumentSnapshot docSnapshot =
+          await _firestore.collection('voucher').doc(voucherID).get();
+      return VoucherModel.fromFirestore(docSnapshot);
     } catch (e) {
       throw Exception('Failed to get voucher detail: $e');
     }
@@ -65,7 +96,10 @@ class VoucherRepository {
 
   Future<void> updateVoucher(VoucherModel voucher) async {
     try {
-      await _firestore.collection('voucher').doc(voucher.voucherID).update(voucher.toMap());
+      await _firestore
+          .collection('voucher')
+          .doc(voucher.voucherID)
+          .update(voucher.toMap());
     } catch (e) {
       throw Exception('Failed to update voucher: $e');
     }
@@ -78,12 +112,5 @@ class VoucherRepository {
       throw Exception('Failed to delete voucher: $e');
     }
   }
-  // Future<VoucherModel?> getVoucherByID(String voucherID) async {
-  //   try {
-  //
-  //   }
-  //   catch (e){
-  //     return null;
-  //   }
-  // }
+
 }

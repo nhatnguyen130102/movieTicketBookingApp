@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:latlong2/latlong.dart';
 
+
 import '../../style/style.dart';
 
 class ViewLocationPage extends StatefulWidget {
@@ -17,11 +18,54 @@ class ViewLocationPage extends StatefulWidget {
 }
 
 class _ViewLocationPageState extends State<ViewLocationPage> {
+  String locationMessage = 'Current Location of the User';
+  late String lat;
+  late String long;
+
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location service are disabled.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permission are denied.');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permission are permanetly denied,we cannot request.');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+  void _liveLocation() {
+    LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 100,
+    );
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
+      lat = position.latitude.toString();
+      long = position.longitude.toString();
+
+      setState(() {
+        locationMessage = 'Latitude: $lat , Longtitude: $long';
+      });
+    });
+  }
   @override
   void initState() {
     super.initState();
+
     // _latitude = widget.latitude;
     // _longitude = widget.longitude;
+    // turnon();
+    setState(() {
+
+    });
   }
 
   @override
@@ -67,19 +111,35 @@ class _ViewLocationPageState extends State<ViewLocationPage> {
               ],
             ),
           ),
-          // Center(
-          //   child: Container(
-          //     width: 300,
-          //     height: 300,
-          //     color: Colors.black,
-          //     child: FutureBuilder(
-          //       future: getCurrentLocation(),
-          //       builder: (context, snapshot) {
-          //         return Text(snapshot.data!.toString(),style: TextStyle(color: Colors.white),);
-          //       },
-          //     ),
-          //   ),
-          // ),
+          Center(
+            child: Container(
+              width: 300,
+              height: 300,
+              color: Colors.black,
+              child:  Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(locationMessage, textAlign: TextAlign.center),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        _getCurrentLocation().then((value) {
+                          lat = '${value.latitude}';
+                          long = '${value.longitude}';
+                          setState(() {
+                            locationMessage = 'Latitude: $lat , Longtitude: $long';
+                          });
+                          _liveLocation();
+                        });
+                      },
+                      child: const Text('Get Current Location'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

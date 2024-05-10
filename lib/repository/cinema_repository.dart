@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_1/model/cinema_model.dart';
+import 'package:project_1/model/location_model.dart';
 import 'package:project_1/model/screening_model.dart';
 
 class CinemaRepository {
@@ -24,7 +25,7 @@ class CinemaRepository {
     }
   }
 
-  Future<CinemaModel?> getCinemaByID(String cinemaID) async {
+  Future<CinemaModel> getCinemaByID(String cinemaID) async {
     try {
       QuerySnapshot querySnapshot = await _firestore
           .collection('cinema')
@@ -34,7 +35,7 @@ class CinemaRepository {
           querySnapshot.docs.map((e) => CinemaModel.fromSnapshot(e)).first;
       return item;
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 
@@ -165,6 +166,76 @@ class CinemaRepository {
       // Xử lý lỗi nếu có
       print('Error in counting screenings by cinema: $e');
       return [];
+    }
+  }
+  Future<List<CinemaModel>> getAllCinema () async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('cinema').get();
+      return querySnapshot.docs.map((e) => CinemaModel.fromSnapshot(e)).toList();
+    }catch (e){
+      throw e;
+    }
+  }
+  Future<void> createCinema({
+    required String name,
+    required String address,
+    required double latitude,
+    required double longitude,
+    required String locationID,
+  }) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('cinema').get();
+      List<CinemaModel> _listCinema = querySnapshot.docs.map((e) => CinemaModel.fromSnapshot(e)).toList();
+      String cinemaID= 'cinema' + (_listCinema.length + 1).toString();
+      await _firestore.collection('cinema').doc(cinemaID).set({
+        'cinemaID': cinemaID,
+        'name': name,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'locationID': locationID,
+
+      });
+    } catch (e) {
+      throw Exception('Failed to create voucher: $e');
+    }
+  }
+
+  Future<void> editCinema({
+    required String cinemaID,
+    required String name,
+    required String address,
+    required double latitude,
+    required double longitude,
+    required String locationID,
+  }) async {
+    try {
+      await _firestore.collection('cinema').doc(cinemaID).set({
+        'cinemaID': cinemaID,
+        'name': name,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'locationID': locationID,
+
+      });
+    } catch (e) {
+      throw Exception('Failed to create voucher: $e');
+    }
+  }
+  Future<List<String>> getListLocation() async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('location').get();
+      List<String>_listString = [];
+      List<LocationModel> _listMovie = querySnapshot.docs.map((e) =>
+          LocationModel.fromMap(e)).toList();
+      for (LocationModel item in _listMovie) {
+        _listString.add(item.locationID);
+      }
+      return _listString;
+    }
+    catch (e) {
+      throw e;
     }
   }
 }

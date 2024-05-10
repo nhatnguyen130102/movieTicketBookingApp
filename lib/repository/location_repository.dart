@@ -49,9 +49,11 @@ class LocationRepository {
             .then((querySnapshot) => querySnapshot.docs.first);
 
         // Trích xuất dữ liệu từ DocumentSnapshot và gán vào biến tempCinema
-        Map<String, dynamic> data = (documentSnapshot.data() as Map<String, dynamic>);
-        String tempCinema = data['cinema']; // Giả sử 'cinema' là một trường trong tài liệu
-        if(!listLocation.contains(tempCinema)){
+        Map<String, dynamic> data =
+            (documentSnapshot.data() as Map<String, dynamic>);
+        String tempCinema =
+            data['cinema']; // Giả sử 'cinema' là một trường trong tài liệu
+        if (!listLocation.contains(tempCinema)) {
           listLocation.add(tempCinema);
         }
       }
@@ -59,6 +61,51 @@ class LocationRepository {
     } catch (e) {
       print("Error getting location by cinema: $e");
       return [];
+    }
+  }
+
+  Future<LocationModel> getLocationByID(String locationID) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('location')
+          .where('locationID', isEqualTo: locationID)
+          .get();
+      return querySnapshot.docs.map((e) => LocationModel.fromMap(e)).first;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> createLocation({
+    required String name,
+  }) async {
+    try {
+      QuerySnapshot querySnapshot =
+          await _firestore.collection('location').get();
+      List<LocationModel> _listLocation =
+          querySnapshot.docs.map((e) => LocationModel.fromMap(e)).toList();
+      String locationID = 'location' + (_listLocation.length + 1).toString();
+      await _firestore.collection('location').doc(locationID).set({
+        'locationID': locationID,
+        'name': name,
+      });
+    } catch (e) {
+      throw Exception('Failed to create voucher: $e');
+    }
+  }
+
+  Future<void> editLocation({
+    required String locationID,
+    required String name,
+  }) async {
+    try {
+
+      await _firestore.collection('location').doc(locationID).set({
+        'locationID': locationID,
+        'name': name,
+      });
+    } catch (e) {
+      throw Exception('Failed to create voucher: $e');
     }
   }
 }

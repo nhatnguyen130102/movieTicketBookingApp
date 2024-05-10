@@ -22,7 +22,7 @@ class _SearchPageState extends State<SearchPage> {
 
   // var
   late final Future<List<MovieModel?>> _listSearch;
-  late TextEditingController _searchController;
+  late TextEditingController _searchController = TextEditingController();
   late Future<List<MovieModel>> _searchResults;
   late String keyword = '';
 
@@ -30,7 +30,6 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _searchController = TextEditingController();
     _searchResults = _movieRepository.searchMovies('');
   }
 
@@ -42,7 +41,9 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
 
     return Scaffold(
       appBar: AppBar(
@@ -66,8 +67,8 @@ class _SearchPageState extends State<SearchPage> {
             Container(
               margin: EdgeInsets.fromLTRB(20, 8, 20, 16),
               child: TextFormField(
+                style: TextStyle(color: Colors.white),
                 controller: _searchController,
-                style: TextStyle(color: white),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -75,77 +76,83 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   hintText: 'Search',
                   hintStyle: TextStyle(
-                      color: white.withOpacity(0.6), fontWeight: light),
+                    color: Colors.white.withOpacity(0.6),
+                    fontWeight: FontWeight.bold,
+                  ),
                   filled: true,
-                  fillColor: white.withOpacity(0.1),
+                  fillColor: Colors.white.withOpacity(0.1),
                   prefixIcon: IconButton(
                     icon: Icon(Icons.search),
                     onPressed: () {
                       setState(() {
-                        keyword = _searchController.text.trim();
+                        String keyword = _searchController.text.trim();
                         _searchResults = _movieRepository.searchMovies(keyword);
+                        _searchController.text = '';
                       });
                     },
                   ),
-                  prefixIconColor: white,
+                  prefixIconColor: Colors.white,
                 ),
               ),
             ),
+            FutureBuilder(
+              future: _searchResults,
+              builder: (context, resultSnapShot) {
+                if (resultSnapShot.connectionState ==
+                    ConnectionState.waiting) {
+                  return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
+                } else if (resultSnapShot.hasError) {
+                  return Text(
+                      'Error: ${resultSnapShot.error}'); // Xử lý lỗi nếu có
+                } else if (resultSnapShot.data == null) {
+                  return Text(
+                      'No data available'); // Xử lý khi không có dữ liệu
+                } else {
+                  return Container(
+                    margin: EdgeInsets.only(
+                      top: 10,
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //Search-Quantity
+                        Row(
+                          children: [
+                            Text(
+                              'ALL',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: semibold,
+                              ),
+                            ),
+                            Gap(8),
+                            Text(
+                              '(${resultSnapShot.data!.length} results)',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: light,
+                                color: white.withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gap(16),
+                        //testResult
 
-            Container(
-              margin: EdgeInsets.only(
-                top: 10,
-                left: 20,
-                right: 20,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  //Search-Quantity
-                  Row(
-                    children: [
-                      Text(
-                        'ALL',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: semibold,
-                        ),
-                      ),
-                      Gap(8),
-                      Text(
-                        '(21 results)',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: light,
-                          color: white.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Gap(16),
-                  //testResult
-                  FutureBuilder(
-                    future: _searchResults,
-                    builder: (context, resultSnapShot) {
-                      if (resultSnapShot.connectionState ==
-                          ConnectionState.waiting) {
-                        return Loading(); // Hiển thị loading indicator nếu đang chờ dữ liệu
-                      } else if (resultSnapShot.hasError) {
-                        return Text(
-                            'Error: ${resultSnapShot.error}'); // Xử lý lỗi nếu có
-                      } else if (resultSnapShot.data == null) {
-                        return Text(
-                            'No data available'); // Xử lý khi không có dữ liệu
-                      } else {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
+                        Container(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width,
                           height: 550,
                           child: ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: resultSnapShot.data!.length,
                             itemBuilder: (context, index) {
                               MovieModel _itemMovie =
-                                  resultSnapShot.data![index];
+                              resultSnapShot.data![index];
                               return Column(
                                 children: [
                                   //Movie-Item
@@ -157,7 +164,7 @@ class _SearchPageState extends State<SearchPage> {
                                         height: size.width / 3,
                                         child: ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(10),
+                                          BorderRadius.circular(10),
                                           child: Image.network(
                                             _itemMovie.banner,
                                             fit: BoxFit.cover,
@@ -173,7 +180,7 @@ class _SearchPageState extends State<SearchPage> {
                                             ],
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(10),
+                                          BorderRadius.circular(10),
                                         ),
                                       ),
                                       Gap(16),
@@ -186,18 +193,18 @@ class _SearchPageState extends State<SearchPage> {
                                             //Rating-&-Details-button
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               children: [
                                                 //Rating
                                                 Container(
                                                   width: size.width / 3 * 2,
                                                   child: Column(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.start,
+                                                    MainAxisAlignment.start,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    CrossAxisAlignment
+                                                        .start,
                                                     children: [
                                                       Text(
                                                         _itemMovie.name,
@@ -207,7 +214,7 @@ class _SearchPageState extends State<SearchPage> {
                                                         style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight:
-                                                                semibold),
+                                                            semibold),
                                                       ),
                                                       Gap(8),
                                                       Row(
@@ -218,11 +225,12 @@ class _SearchPageState extends State<SearchPage> {
                                                           Gap(6),
                                                           Text(
                                                             _itemMovie.rating
-                                                                .toStringAsFixed(1),
+                                                                .toStringAsFixed(
+                                                                1),
                                                             style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    medium),
+                                                                medium),
                                                           ),
                                                         ],
                                                       ),
@@ -236,8 +244,8 @@ class _SearchPageState extends State<SearchPage> {
                                                   decoration: BoxDecoration(
                                                     color: yellow,
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
+                                                    BorderRadius.circular(
+                                                        5),
                                                   ),
                                                   child: GestureDetector(
                                                     onTap: () {
@@ -247,8 +255,8 @@ class _SearchPageState extends State<SearchPage> {
                                                           builder: (context) {
                                                             return MovieDetail(
                                                               movieID:
-                                                                  _itemMovie
-                                                                      .movieID,
+                                                              _itemMovie
+                                                                  .movieID,
                                                             );
                                                           },
                                                         ),
@@ -270,8 +278,8 @@ class _SearchPageState extends State<SearchPage> {
                                             //Genre-Time-Date
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               children: [
                                                 Container(
                                                     width: size.width / 2 - 16,
@@ -287,7 +295,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     width: size.width / 4 - 16,
                                                     child: Text(_itemMovie.age,
                                                         textAlign:
-                                                            TextAlign.center,
+                                                        TextAlign.center,
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                           fontWeight: light,
@@ -298,7 +306,7 @@ class _SearchPageState extends State<SearchPage> {
                                                     width: size.width / 4 - 16,
                                                     child: Text(_itemMovie.date,
                                                         textAlign:
-                                                            TextAlign.end,
+                                                        TextAlign.end,
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                           fontWeight: light,
@@ -321,158 +329,168 @@ class _SearchPageState extends State<SearchPage> {
                               );
                             },
                           ),
-                        );
-                      }
-                    },
-                  ),
+                        ),
 
-                  //Results-List
-                  // Column(
-                  //   children: [
-                  //     //Movie-Item
-                  //     Column(
-                  //       children: [
-                  //         //Movie-Image
-                  //         Container(
-                  //           width: size.width,
-                  //           height: size.width / 3,
-                  //           child: ClipRRect(
-                  //             borderRadius: BorderRadius.circular(10),
-                  //             child: Image.network(
-                  //               'https://static1.colliderimages.com/wordpress/wp-content/uploads/2024/03/ghostbusters-frozen-empire-poster-full-cast.jpg',
-                  //               fit: BoxFit.cover,
-                  //             ),
-                  //           ),
-                  //           decoration: BoxDecoration(
-                  //             gradient: LinearGradient(
-                  //               begin: Alignment.topCenter,
-                  //               end: Alignment.bottomCenter,
-                  //               colors: [
-                  //                 black.withOpacity(0.1),
-                  //                 black,
-                  //               ],
-                  //             ),
-                  //             borderRadius: BorderRadius.circular(10),
-                  //           ),
-                  //         ),
-                  //         Gap(16),
-                  //
-                  //         //Movie-Info
-                  //         Container(
-                  //           width: size.width,
-                  //           child: Column(
-                  //             children: [
-                  //               //Rating-&-Details-button
-                  //               Row(
-                  //                 mainAxisAlignment:
-                  //                     MainAxisAlignment.spaceBetween,
-                  //                 children: [
-                  //                   //Rating
-                  //                   Container(
-                  //                     width: size.width / 3 * 2,
-                  //                     child: Column(
-                  //                       mainAxisAlignment:
-                  //                           MainAxisAlignment.start,
-                  //                       crossAxisAlignment:
-                  //                           CrossAxisAlignment.start,
-                  //                       children: [
-                  //                         Text(
-                  //                           'BIỆT ĐỘI SĂN MA: KỶ NGUYÊN BĂNG GIÁ',
-                  //                           maxLines: 1,
-                  //                           overflow: TextOverflow.ellipsis,
-                  //                           style: TextStyle(
-                  //                               fontSize: 16,
-                  //                               fontWeight: semibold),
-                  //                         ),
-                  //                         Gap(8),
-                  //                         Row(
-                  //                           children: [
-                  //                             Icon(Icons.star,
-                  //                                 color: yellow, size: 14),
-                  //                             Gap(6),
-                  //                             Text(
-                  //                               '4.7',
-                  //                               style: TextStyle(
-                  //                                   fontSize: 14,
-                  //                                   fontWeight: medium),
-                  //                             ),
-                  //                           ],
-                  //                         ),
-                  //                       ],
-                  //                     ),
-                  //                   ),
-                  //
-                  //                   //Details-button
-                  //                   Container(
-                  //                     padding: EdgeInsets.all(10),
-                  //                     decoration: BoxDecoration(
-                  //                       color: yellow,
-                  //                       borderRadius: BorderRadius.circular(5),
-                  //                     ),
-                  //                     child: Text(
-                  //                       'DETAILS',
-                  //                       style: TextStyle(
-                  //                           color: black,
-                  //                           fontWeight: bold,
-                  //                           fontSize: 12),
-                  //                     ),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //               Gap(10),
-                  //
-                  //               //Genre-Time-Date
-                  //               Row(
-                  //                 mainAxisAlignment:
-                  //                     MainAxisAlignment.spaceBetween,
-                  //                 children: [
-                  //                   Container(
-                  //                       width: size.width / 2 - 16,
-                  //                       child:
-                  //                           Text('Action, Adventure, Fantasy',
-                  //                               style: TextStyle(
-                  //                                 fontSize: 14,
-                  //                                 fontWeight: light,
-                  //                                 color: white.withOpacity(0.7),
-                  //                               ))),
-                  //                   Container(
-                  //                       width: size.width / 4 - 16,
-                  //                       child: Text('T16',
-                  //                           textAlign: TextAlign.center,
-                  //                           style: TextStyle(
-                  //                             fontSize: 14,
-                  //                             fontWeight: light,
-                  //                             color: white.withOpacity(0.7),
-                  //                           ))),
-                  //                   Container(
-                  //                       width: size.width / 4 - 16,
-                  //                       child: Text('20/05/2024',
-                  //                           textAlign: TextAlign.end,
-                  //                           style: TextStyle(
-                  //                             fontSize: 14,
-                  //                             fontWeight: light,
-                  //                             color: white.withOpacity(0.7),
-                  //                           ))),
-                  //                 ],
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //     Gap(32),
-                  //
-                  //     //Movie-Item
-                  //     //Movie-Item
-                  //     //Movie-Item
-                  //   ],
-                  // ),
-                ],
-              ),
+                        //Results-List
+                        // Column(
+                        //   children: [
+                        //     //Movie-Item
+                        //     Column(
+                        //       children: [
+                        //         //Movie-Image
+                        //         Container(
+                        //           width: size.width,
+                        //           height: size.width / 3,
+                        //           child: ClipRRect(
+                        //             borderRadius: BorderRadius.circular(10),
+                        //             child: Image.network(
+                        //               'https://static1.colliderimages.com/wordpress/wp-content/uploads/2024/03/ghostbusters-frozen-empire-poster-full-cast.jpg',
+                        //               fit: BoxFit.cover,
+                        //             ),
+                        //           ),
+                        //           decoration: BoxDecoration(
+                        //             gradient: LinearGradient(
+                        //               begin: Alignment.topCenter,
+                        //               end: Alignment.bottomCenter,
+                        //               colors: [
+                        //                 black.withOpacity(0.1),
+                        //                 black,
+                        //               ],
+                        //             ),
+                        //             borderRadius: BorderRadius.circular(10),
+                        //           ),
+                        //         ),
+                        //         Gap(16),
+                        //
+                        //         //Movie-Info
+                        //         Container(
+                        //           width: size.width,
+                        //           child: Column(
+                        //             children: [
+                        //               //Rating-&-Details-button
+                        //               Row(
+                        //                 mainAxisAlignment:
+                        //                     MainAxisAlignment.spaceBetween,
+                        //                 children: [
+                        //                   //Rating
+                        //                   Container(
+                        //                     width: size.width / 3 * 2,
+                        //                     child: Column(
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment.start,
+                        //                       crossAxisAlignment:
+                        //                           CrossAxisAlignment.start,
+                        //                       children: [
+                        //                         Text(
+                        //                           'BIỆT ĐỘI SĂN MA: KỶ NGUYÊN BĂNG GIÁ',
+                        //                           maxLines: 1,
+                        //                           overflow: TextOverflow.ellipsis,
+                        //                           style: TextStyle(
+                        //                               fontSize: 16,
+                        //                               fontWeight: semibold),
+                        //                         ),
+                        //                         Gap(8),
+                        //                         Row(
+                        //                           children: [
+                        //                             Icon(Icons.star,
+                        //                                 color: yellow, size: 14),
+                        //                             Gap(6),
+                        //                             Text(
+                        //                               '4.7',
+                        //                               style: TextStyle(
+                        //                                   fontSize: 14,
+                        //                                   fontWeight: medium),
+                        //                             ),
+                        //                           ],
+                        //                         ),
+                        //                       ],
+                        //                     ),
+                        //                   ),
+                        //
+                        //                   //Details-button
+                        //                   Container(
+                        //                     padding: EdgeInsets.all(10),
+                        //                     decoration: BoxDecoration(
+                        //                       color: yellow,
+                        //                       borderRadius: BorderRadius.circular(5),
+                        //                     ),
+                        //                     child: Text(
+                        //                       'DETAILS',
+                        //                       style: TextStyle(
+                        //                           color: black,
+                        //                           fontWeight: bold,
+                        //                           fontSize: 12),
+                        //                     ),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               Gap(10),
+                        //
+                        //               //Genre-Time-Date
+                        //               Row(
+                        //                 mainAxisAlignment:
+                        //                     MainAxisAlignment.spaceBetween,
+                        //                 children: [
+                        //                   Container(
+                        //                       width: size.width / 2 - 16,
+                        //                       child:
+                        //                           Text('Action, Adventure, Fantasy',
+                        //                               style: TextStyle(
+                        //                                 fontSize: 14,
+                        //                                 fontWeight: light,
+                        //                                 color: white.withOpacity(0.7),
+                        //                               ))),
+                        //                   Container(
+                        //                       width: size.width / 4 - 16,
+                        //                       child: Text('T16',
+                        //                           textAlign: TextAlign.center,
+                        //                           style: TextStyle(
+                        //                             fontSize: 14,
+                        //                             fontWeight: light,
+                        //                             color: white.withOpacity(0.7),
+                        //                           ))),
+                        //                   Container(
+                        //                       width: size.width / 4 - 16,
+                        //                       child: Text('20/05/2024',
+                        //                           textAlign: TextAlign.end,
+                        //                           style: TextStyle(
+                        //                             fontSize: 14,
+                        //                             fontWeight: light,
+                        //                             color: white.withOpacity(0.7),
+                        //                           ))),
+                        //                 ],
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //     Gap(32),
+                        //
+                        //     //Movie-Item
+                        //     //Movie-Item
+                        //     //Movie-Item
+                        //   ],
+                        // ),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
+
           ],
         ),
       ),
     );
   }
+// void _searchFirestore(String keyword) {
+//   // Replace this function with your Firestore search function
+//   // This is just a placeholder for demonstration purposes
+//   setState(() {
+//     _searchResults = _searchResults
+//         .where((movie) => movie['title'].toLowerCase().contains(keyword.toLowerCase()))
+//         .toList();
+//   });
+// }
 }
